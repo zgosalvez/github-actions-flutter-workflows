@@ -13,7 +13,7 @@ All workflows use the [Ensure SHA Pinned Actions](https://github.com/marketplace
 ### Quality Control
 [![QC](https://github.com/zgosalvez/github-actions-flutter-workflow/workflows/QC/badge.svg)](https://github.com/zgosalvez/github-actions-flutter-workflow/actions?query=workflow%3AQC)
 
-[`.github/workflows/qc.yml`](.github/workflows/qc.yml)
+[`.github/workflows/qc.yml`](workflows/qc.yml)
 
 Also known as QC, Quality Control runs static analysis then Flutter testing. The coverage report is stored as an artifact for reference. Modify the workflow to further process the code coverage file using [code quality](https://github.com/marketplace?type=actions) or [code review](https://github.com/marketplace?category=code-review&type=actions) actions.
 
