@@ -13,7 +13,7 @@ jobs:
     - name: Clone the repository
       uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2.3.4
     - name: Ensure SHA pinned actions
-      uses: zgosalvez/github-actions-ensure-sha-pinned-actions@294297a2b659ada5c8ab3350158b175f10f30a4d # v1.0.0
+      uses: zgosalvez/github-actions-ensure-sha-pinned-actions@e70e07ef05f0a3bf1483fde3c50eeab9c1805041 # v1.0.1
 
   static_analysis:
     name: Run static analysis
@@ -26,7 +26,7 @@ jobs:
       uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2.3.4
     - name: Get Flutter version
       id: get-flutter-version
-      uses: zgosalvez/github-actions-get-flutter-version-env@d6d2f6f28a17cf7758b97d56598be057b13ae09a # v1.1.0
+      uses: zgosalvez/github-actions-get-flutter-version-env@8c616b4685d25cceda9bafa61f6c72670f6aa01e # v1.1.1
     - name: Set up Flutter
       uses: subosito/flutter-action@26bf50084a0c218b5b715a3641c36eac84fd2136 # v1.4.0
       with:
@@ -48,7 +48,7 @@ jobs:
     - name: Get Flutter packages
       run: flutter pub get ${{ steps.cache.outputs.cache-hit == 'true' && '--offline' || '' }}
     - name: Analyze Flutter
-      uses: zgosalvez/github-actions-analyze-flutter@401f9e568f7f75f766b9d8549b045c56e24f7415 # v1.0.2
+      uses: zgosalvez/github-actions-analyze-flutter@337a56d93e405a585348c0695b420b3d1f5887e6 # v1.0.3
 
   testing:
     name: Run ${{ matrix.category }} testing
