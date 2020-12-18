@@ -10,12 +10,12 @@ Create a workflow `.yml` file in your `.github/workflows` directory. Example wor
 
 All workflows use the [Ensure SHA Pinned Actions](https://github.com/marketplace/actions/ensure-sha-pinned-actions) action to ensure security hardening.
 
-### Quality Control
-[![QC](https://github.com/zgosalvez/github-actions-flutter-workflow/workflows/QC/badge.svg)](https://github.com/zgosalvez/github-actions-flutter-workflow/actions?query=workflow%3AQC)
+### Continuous Integration
+[![CI](https://github.com/zgosalvez/github-actions-flutter-workflow/workflows/CI/badge.svg)](https://github.com/zgosalvez/github-actions-flutter-workflow/actions?query=workflow%3ACI)
 
-[`.github/workflows/qc.yml`](workflows/qc.yml)
+[`.github/workflows/ci.yml`](workflows/ci.yml)
 
-Also known as QC, Quality Control runs Flutter static and dynamic tests, then the coverage report is stored as an artifact for reference. Modify the workflow to further process the code coverage file using [code quality](https://github.com/marketplace?type=actions) or [code review](https://github.com/marketplace?category=code-review&type=actions) actions.
+Also known as CI, Continuous Integration runs Flutter static and dynamic tests, then the coverage report is stored as an artifact for reference. Modify the workflow to further process the code coverage file using [code quality](https://github.com/marketplace?type=actions) or [code review](https://github.com/marketplace?category=code-review&type=actions) actions.
 
 ## License
 The scripts and documentation in this project are released under the [MIT License](LICENSE)
