@@ -69,10 +69,9 @@ jobs:
     # static testing
     - name: Analyze Flutter
       if: matrix.category == 'static'
-      run: |
-        flutter analyze
-        flutter format --set-exit-if-changed --dry-run .
-      working-directory: code
+      use: zgosalvez/github-actions-analyze-flutter@42999ac72bf187609b2b61ec93bf0b03e4ebca6e # v1.1.0
+      with:
+        working-directory: code
     
     # unit testing
     - name: Run Flutter ${{ matrix.category }} tests
