@@ -1,6 +1,6 @@
 # GitHub Actions: Flutter Workflows
 
-This sample project allows you to leverage GitHub Actions to run common Flutter workflows.
+This sample project allows you to leverage GitHub Actions to run common Flutter workflows. These are based on the workflows found in the [Flutter Gallery](https://github.com/flutter/gallery) repository.
 
 ## Usage
 

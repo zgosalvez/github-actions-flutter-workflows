@@ -38,7 +38,7 @@ jobs:
       id: cache
       uses: actions/cache@0781355a23dac32fd3bac414512f4b903437991a # v2.1.3
       with:
-        path: flutter # https://github.com/subosito/flutter-action/blob/26bf50084a0c218b5b715a3641c36eac84fd2136/src/installer.ts#L37
+        path: flutter
         key: pub-${{ env.cache-name }}-${{ steps.get-flutter-version.outputs.version }}-${{ hashFiles('code/pubspec.lock') }}
         restore-keys: |
           pub-${{ env.cache-name }}-${{ steps.get-flutter-version.outputs.version }}-
