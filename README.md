@@ -1,5 +1,5 @@
 # GitHub Actions: Flutter Workflow
-![QC](https://github.com/zgosalvez/github-actions-flutter-workflow/workflows/QC/badge.svg)
+[![QC](https://github.com/zgosalvez/github-actions-flutter-workflow/workflows/QC/badge.svg)](https://github.com/zgosalvez/github-actions-flutter-workflow/actions?query=workflow%3AQC)
 
 This sample project allows you to leverage GitHub Actions to run common Flutter workflows.
 
