@@ -1,16 +1,8 @@
-# github_actions_flutter_workflow
+# GitHub Actions: Flutter Workflow
+![QC](https://github.com/zgosalvez/github-actions-flutter-workflow/workflows/QC/badge.svg)
 
-A new Flutter project.
+This sample project allows you to leverage GitHub Actions to run common Flutter workflows.
 
-## Getting Started
+## Usage
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Create a workflow `.yml` file in your `.github/workflows` directory. Example workflows are available in this repository. For more information, reference the GitHub Help Documentation for [Creating a workflow file](https://help.github.com/en/articles/configuring-a-workflow#creating-a-workflow-file).
