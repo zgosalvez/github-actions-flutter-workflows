@@ -15,78 +15,75 @@ jobs:
     - name: Ensure SHA pinned actions
       uses: zgosalvez/github-actions-ensure-sha-pinned-actions@e70e07ef05f0a3bf1483fde3c50eeab9c1805041 # v1.0.1
 
-  static_analysis:
-    name: Run static analysis
+  testing:
+    name: Run ${{ matrix.category }} testing
     needs: security_hardening
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        category: [static, unit, widget]
     outputs:
       flutter_version: ${{ steps.get-flutter-version.outputs.version }}
     steps:
     - name: Clone the repository
       uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2.3.4
+      with:
+        path: code
     - name: Get Flutter version
       id: get-flutter-version
       uses: zgosalvez/github-actions-get-flutter-version-env@8c616b4685d25cceda9bafa61f6c72670f6aa01e # v1.1.1
-    - name: Set up Flutter
-      uses: subosito/flutter-action@26bf50084a0c218b5b715a3641c36eac84fd2136 # v1.4.0
       with:
-        flutter-version: ${{ steps.get-flutter-version.outputs.version }}
+        pubspec-file-path: code/pubspec.yaml
     - name: Cache Flutter packages
       id: cache
       uses: actions/cache@0781355a23dac32fd3bac414512f4b903437991a # v2.1.3
       with:
-        path: | # https://github.com/subosito/flutter-action/blob/26bf50084a0c218b5b715a3641c36eac84fd2136/src/installer.ts#L37
-          ${{ format('{0}/.pub-cache', env.FLUTTER_HOME) }} 
-          ${{ format('{0}/bin/.pub-cache', env.FLUTTER_HOME) }}
-        key: pub-${{ env.cache-name }}-${{ steps.get-flutter-version.outputs.version }}-${{ hashFiles('pubspec.lock') }}
+        path: flutter # https://github.com/subosito/flutter-action/blob/26bf50084a0c218b5b715a3641c36eac84fd2136/src/installer.ts#L37
+        key: pub-${{ env.cache-name }}-${{ steps.get-flutter-version.outputs.version }}-${{ hashFiles('code/pubspec.lock') }}
         restore-keys: |
           pub-${{ env.cache-name }}-${{ steps.get-flutter-version.outputs.version }}-
           pub-${{ env.cache-name }}-
           pub-
       env:
         cache-name: cache-flutter-packages
-    - name: Get Flutter packages
-      run: flutter pub get ${{ steps.cache.outputs.cache-hit == 'true' && '--offline' || '' }}
-    - name: Analyze Flutter
-      uses: zgosalvez/github-actions-analyze-flutter@337a56d93e405a585348c0695b420b3d1f5887e6 # v1.0.3
-
-  testing:
-    name: Run ${{ matrix.category }} testing
-    needs: static_analysis
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        category: [unit, widget]
-    steps:
-    - name: Clone the repository
+    - name: Clone the Flutter repository
+      if: steps.cache.outputs.cache-hit != 'true'
       uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2.3.4
-    - name: Set up Flutter
-      uses: subosito/flutter-action@26bf50084a0c218b5b715a3641c36eac84fd2136 # v1.4.0
       with:
-        flutter-version: ${{ needs.static_analysis.outputs.flutter_version }}
-    - name: Cache Flutter packages
-      id: cache
-      uses: actions/cache@0781355a23dac32fd3bac414512f4b903437991a # v2.1.3
-      with:
-        path: | # https://github.com/subosito/flutter-action/blob/26bf50084a0c218b5b715a3641c36eac84fd2136/src/installer.ts#L37
-          ${{ format('{0}/.pub-cache', env.FLUTTER_HOME) }} 
-          ${{ format('{0}/bin/.pub-cache', env.FLUTTER_HOME) }}
-        key: pub-${{ env.cache-name }}-${{ needs.static_analysis.outputs.flutter_version }}-${{ hashFiles('pubspec.lock') }}
-        restore-keys: |
-          pub-${{ env.cache-name }}-${{ needs.static_analysis.outputs.flutter_version }}-
-          pub-${{ env.cache-name }}-
-          pub-
-      env:
-        cache-name: cache-flutter-packages
+        repository: flutter/flutter
+        ref: ${{ steps.get-flutter-version.outputs.version }}
+        path: flutter
+    - name: Add the flutter tool to the path
+      run: echo "$GITHUB_WORKSPACE/flutter/bin" >> $GITHUB_PATH
+    - name: Populate the Flutter tool's cache of binary artifacts
+      if: steps.cache.outputs.cache-hit != 'true'
+      run: |
+        flutter config --no-analytics
+        flutter precache
     - name: Get Flutter packages
-      run: flutter pub get ${{ steps.cache.outputs.cache-hit == 'true' && '--offline' || '' }}
+      if: steps.cache.outputs.cache-hit != 'true'
+      run: flutter pub get
+      working-directory: code
+
+    # static testing
+    - name: Analyze Flutter
+      if: matrix.category == 'static'
+      run: |
+        flutter analyze
+        flutter format --set-exit-if-changed --dry-run .
+      working-directory: code
+    
+    # unit testing
     - name: Run Flutter ${{ matrix.category }} tests
+      if: matrix.category != 'static'
       run: flutter test --coverage --coverage-path=./coverage/lcov.${{ matrix.category }}.info test/${{ matrix.category }}s
+      working-directory: code
     - name: Upload code coverage to GitHub
+      if: matrix.category != 'static'
       uses: actions/upload-artifact@726a6dcd0199f578459862705eed35cda05af50b # v2.2.1
       with:
         name: code-coverage
-        path: coverage/lcov.${{ matrix.category }}.info
+        path: code/coverage/lcov.${{ matrix.category }}.info
 
   coverage_report:
     name: Generate coverage report

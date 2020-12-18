@@ -15,7 +15,7 @@ All workflows use the [Ensure SHA Pinned Actions](https://github.com/marketplace
 
 [`.github/workflows/qc.yml`](workflows/qc.yml)
 
-Also known as QC, Quality Control runs static analysis then Flutter testing. The coverage report is stored as an artifact for reference. Modify the workflow to further process the code coverage file using [code quality](https://github.com/marketplace?type=actions) or [code review](https://github.com/marketplace?category=code-review&type=actions) actions.
+Also known as QC, Quality Control runs Flutter static and dynamic tests, then the coverage report is stored as an artifact for reference. Modify the workflow to further process the code coverage file using [code quality](https://github.com/marketplace?type=actions) or [code review](https://github.com/marketplace?category=code-review&type=actions) actions.
 
 ## License
 The scripts and documentation in this project are released under the [MIT License](LICENSE)
