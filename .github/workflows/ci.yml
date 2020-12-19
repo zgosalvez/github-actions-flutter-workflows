@@ -69,7 +69,7 @@ jobs:
     # static testing
     - name: Analyze Flutter
       if: matrix.category == 'static'
-      uses: zgosalvez/dartanalyzer-annotations-action@feature%2Fproblem-matcher
+      uses: zgosalvez/dartanalyzer-annotations-action@feature-problem-matcher
       with:
         working-directory: code
       env:
