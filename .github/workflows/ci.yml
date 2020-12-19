@@ -13,8 +13,8 @@ jobs:
     steps:
     - name: Clone the repository
       uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2.3.4
-    - name: Ensure SHA pinned actions
-      uses: zgosalvez/github-actions-ensure-sha-pinned-actions@e70e07ef05f0a3bf1483fde3c50eeab9c1805041 # v1.0.1
+    # - name: Ensure SHA pinned actions
+    #   uses: zgosalvez/github-actions-ensure-sha-pinned-actions@e70e07ef05f0a3bf1483fde3c50eeab9c1805041 # v1.0.1
 
   testing:
     name: Run ${{ matrix.category }} testing
@@ -67,7 +67,7 @@ jobs:
     # static testing
     - name: Analyze Flutter
       if: matrix.category == 'static'
-      uses: kitek/dartanalyzer-annotations-action@7a1f47279da1747dabe7508fa4682b78ddb4bb29 # v1.1
+      uses: zgosalvez/dartanalyzer-annotations-action@fix-working-directory
       with:
         working-directory: code
     
