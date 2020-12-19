@@ -61,7 +61,6 @@ jobs:
         flutter config --no-analytics
         flutter precache
     - name: Get Flutter packages
-      if: steps.flutter-cache.outputs.cache-hit != 'true'
       run: flutter pub get
       working-directory: code
 
