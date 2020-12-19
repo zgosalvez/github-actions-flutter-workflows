@@ -17,10 +17,7 @@ All workflows use the [Ensure SHA Pinned Actions](https://github.com/marketplace
 
 Also known as CI, Continuous Integration runs Flutter static and dynamic tests, then the coverage report is stored as an artifact for reference. Modify the workflow to further process the code coverage file using [code quality](https://github.com/marketplace?type=actions) or [code review](https://github.com/marketplace?category=code-review&type=actions) actions.
 
-### Flutter Modifications
-
-- env
-- 
+_Note:_ The [Get the Flutter Version Environment](https://github.com/marketplace/actions/get-the-flutter-version-environment) action requires that the [`pubspec.yaml`](pubspec.yaml) file contains an `environment:flutter:` key.
 
 ## License
 The scripts and documentation in this project are released under the [MIT License](LICENSE)
