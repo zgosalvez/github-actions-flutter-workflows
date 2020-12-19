@@ -69,6 +69,7 @@ jobs:
       if: matrix.category == 'static'
       uses: zgosalvez/github-actions-analyze-flutter@feature-problem-matcher
       with:
+        fail-on-warnings: true
         working-directory: code
     
     # unit testing
