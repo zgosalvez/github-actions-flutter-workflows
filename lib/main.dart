@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'test.dart';
 
 void main() {
@@ -10,8 +11,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     try {
-    final x = "";
-    } catch (e) {}
+      final x = "";
+
+    } catch (e) {
+
+    }
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
