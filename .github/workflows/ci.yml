@@ -70,7 +70,7 @@ jobs:
     - name: Analyze Flutter
       if: matrix.category == 'static'
       run: |
-        echo "::add-matcher::flutter-analyze-problem-matcher.json"  
+        echo "::add-matcher::code/flutter-analyze-problem-matcher.json"  
         flutter analyze
         echo "::remove-matcher owner=flutter-analyze::"
 
