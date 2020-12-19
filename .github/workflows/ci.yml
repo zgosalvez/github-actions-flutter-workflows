@@ -74,7 +74,7 @@ jobs:
     # unit testing
     - name: Run Flutter ${{ matrix.category }} tests
       if: matrix.category != 'static'
-      run: flutter test --coverage --coverage-path=./coverage/lcov.${{ matrix.category }}.info test/${{ matrix.category }}s
+      run: flutter test --no-pub --coverage --coverage-path=./coverage/lcov.${{ matrix.category }}.info test/${{ matrix.category }}s
       working-directory: code
     - name: Upload code coverage to GitHub
       if: matrix.category != 'static'
