@@ -71,7 +71,11 @@ jobs:
       if: matrix.category == 'static'
       uses: zgosalvez/dartanalyzer-annotations-action@fix-working-directory
       with:
+        check_name: Run ${{ matrix.category }} testing
+        commit_sha: ${{ github.event.pull_request.head.sha }}
         working-directory: code
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
     
     # unit testing
     - name: Run Flutter ${{ matrix.category }} tests
