@@ -69,13 +69,20 @@ jobs:
     # static testing
     - name: Analyze Flutter
       if: matrix.category == 'static'
-      uses: zgosalvez/dartanalyzer-annotations-action@simplify-action-inputs
-      with:
-        check_name: Run ${{ matrix.category }} testing
-        commit_sha: ${{ github.event.pull_request.head.sha }}
-        working-directory: code
-      env:
-        GITHUB_TOKEN: ${{ github.token }}
+      run: |
+        echo "::add-matcher::flutter-analyze-problem-matcher.json"  
+        flutter analyze
+        echo "::remove-matcher owner=flutter-analyze::"
+
+        flutter format --set-exit-if-changed --dry-run .
+      working-directory: code
+      # uses: zgosalvez/dartanalyzer-annotations-action@simplify-action-inputs
+      # with:
+      #   check_name: Run ${{ matrix.category }} testing
+      #   commit_sha: ${{ github.event.pull_request.head.sha }}
+      #   working-directory: code
+      # env:
+      #   GITHUB_TOKEN: ${{ github.token }}
     
     # unit testing
     - name: Run Flutter ${{ matrix.category }} tests
