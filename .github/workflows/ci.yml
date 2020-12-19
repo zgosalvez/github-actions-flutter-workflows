@@ -67,13 +67,9 @@ jobs:
     # static testing
     - name: Analyze Flutter
       if: matrix.category == 'static'
-      uses: zgosalvez/dartanalyzer-annotations-action@simplify-action-inputs
+      uses: zgosalvez/github-actions-analyze-flutter@feature-problem-matcher
       with:
         working-directory: code
-    - name: Format Flutter
-      if: matrix.category == 'static'
-      run: flutter format --set-exit-if-changed --dry-run .
-      working-directory: code
     
     # unit testing
     - name: Run Flutter ${{ matrix.category }} tests
