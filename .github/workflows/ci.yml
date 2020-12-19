@@ -13,7 +13,7 @@ jobs:
     steps:
     - name: Clone the repository
       uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2.3.4
-    # - name: Ensure SHA pinned actions
+    # TODO: - name: Ensure SHA pinned actions
     #   uses: zgosalvez/github-actions-ensure-sha-pinned-actions@e70e07ef05f0a3bf1483fde3c50eeab9c1805041 # v1.0.1
 
   testing:
@@ -69,20 +69,11 @@ jobs:
     # static testing
     - name: Analyze Flutter
       if: matrix.category == 'static'
-      run: |
-        echo "::add-matcher::code/flutter-analyze-problem-matcher.json"  
-        flutter analyze
-        echo "::remove-matcher owner=flutter-analyze::"
-
-        flutter format --set-exit-if-changed --dry-run .
-      working-directory: code
-      # uses: zgosalvez/dartanalyzer-annotations-action@simplify-action-inputs
-      # with:
-      #   check_name: Run ${{ matrix.category }} testing
-      #   commit_sha: ${{ github.event.pull_request.head.sha }}
-      #   working-directory: code
-      # env:
-      #   GITHUB_TOKEN: ${{ github.token }}
+      uses: zgosalvez/dartanalyzer-annotations-action@feature/problem-matcher
+      with:
+        working-directory: code
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
     
     # unit testing
     - name: Run Flutter ${{ matrix.category }} tests
