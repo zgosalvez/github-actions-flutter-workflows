@@ -71,8 +71,6 @@ jobs:
       uses: zgosalvez/dartanalyzer-annotations-action@simplify-action-inputs
       with:
         working-directory: code
-      env:
-        GITHUB_TOKEN: ${{ github.token }}
     
     # unit testing
     - name: Run Flutter ${{ matrix.category }} tests
