@@ -67,7 +67,7 @@ jobs:
     # static testing
     - name: Analyze Flutter
       if: matrix.category == 'static'
-      uses: mkitek/dartanalyzer-annotations-action@7a1f47279da1747dabe7508fa4682b78ddb4bb29 # v1.1
+      uses: kitek/dartanalyzer-annotations-action@7a1f47279da1747dabe7508fa4682b78ddb4bb29 # v1.1
       with:
         working-directory: code
     
