@@ -69,6 +69,7 @@ jobs:
       if: matrix.category == 'static'
       uses: zgosalvez/github-actions-analyze-flutter@test # v1.2.2
       with:
+        analysis-options-file: analysis_options.yml
         fail-on-warnings: true
         working-directory: code
     
