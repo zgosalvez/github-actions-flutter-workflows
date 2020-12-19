@@ -69,7 +69,7 @@ jobs:
     # static testing
     - name: Analyze Flutter
       if: matrix.category == 'static'
-      uses: zgosalvez/dartanalyzer-annotations-action@fix-working-directory
+      uses: zgosalvez/dartanalyzer-annotations-action@simplify-action-inputs
       with:
         check_name: Run ${{ matrix.category }} testing
         commit_sha: ${{ github.event.pull_request.head.sha }}
