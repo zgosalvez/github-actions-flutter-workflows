@@ -150,6 +150,7 @@ jobs:
       with:
         upload_url: ${{ github.event.release.upload_url }}
         asset_path: build/app/outputs/flutter-apk/app-release.apk
+        asset_name: app-release.apk
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
@@ -162,7 +163,8 @@ jobs:
       uses: actions/upload-release-asset@e8f9f06c4b078e705bd2ea027f0926603fc9b4d5 # v1.0.2
       with:
         upload_url: ${{ github.event.release.upload_url }}
-        asset_path: build/app/outputs/bundle/release/app-release.aab 
+        asset_path: build/app/outputs/bundle/release/app-release.aab
+        asset_name: app-release.aab
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -178,5 +180,6 @@ jobs:
       with:
         upload_url: ${{ github.event.release.upload_url }}
         asset_path: build/ios/iphoneos/Runner.app
+        asset_name: Runner.app
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
