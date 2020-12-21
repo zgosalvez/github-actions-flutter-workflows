@@ -155,12 +155,18 @@ jobs:
       working-directory: code
 
     # all
+    - name: Parse the release tag
+      id: parse-release-tag
+      run: | # remove the leading "v"
+        VERSION=${{ github.event.release.tag_name }}
+        echo "::set-output name=version::${VERSION#v}"
+      working-directory: code
     - name: Set the app version
       uses: microsoft/variable-substitution@6287962da9e5b6e68778dc51e840caa03ca84495 # v1 
       with:
         files: 'code/pubspec.yaml'
       env:
-        version: ${{ github.event.release.tag_name }}
+        version: ${{ steps.parse-release-tag.outputs.version }}
 
     # apk
     - name: Build an Android APK file
