@@ -1,1 +1,11 @@
+categories:
+  - title: 'Enhancements'
+    labels:
+      - 'enhancement'
+  - title: 'Fixes'
+    labels:
+      - 'bug'
+      - 'security'
+change-template: '• $TITLE — #$NUMBER'
+no-changes-template: ''
 template: $CHANGES

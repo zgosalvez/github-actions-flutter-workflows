@@ -1,7 +1,7 @@
-name: CI
+name: CDelivery
 
 on:
-  pull_request:
+  push:
     branches: [ main ]
 
 jobs:
@@ -37,10 +37,9 @@ jobs:
       uses: actions/cache@0781355a23dac32fd3bac414512f4b903437991a # v2.1.3
       with:
         path: flutter
-        key: ${{ env.cache-name }}-ubuntu-latest-${{ steps.get-flutter-version.outputs.version }}-${{ hashFiles('code/pubspec.lock') }}
+        key: ${{ env.cache-name }}-${{ steps.get-flutter-version.outputs.version }}-${{ hashFiles('code/pubspec.lock') }}
         restore-keys: |
-          ${{ env.cache-name }}-ubuntu-latest-${{ steps.get-flutter-version.outputs.version }}-
-          ${{ env.cache-name }}-ubuntu-latest-
+          ${{ env.cache-name }}-${{ steps.get-flutter-version.outputs.version }}-
           ${{ env.cache-name }}-
       env:
         cache-name: flutter-cache
@@ -84,24 +83,14 @@ jobs:
         name: code-coverage
         path: code/coverage/lcov.${{ matrix.category }}.info
 
-  coverage_report:
-    name: Generate coverage report
+  draft_release:
+    name: Draft a release
     needs: testing
     runs-on: ubuntu-latest
     steps:
-    - name: Clone the repository
-      uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2.3.4
-    - name: Install lcov
-      run: sudo apt-get install lcov
-    - name: Download code coverage from GitHub
-      uses: actions/download-artifact@f144d3c3916a86f4d6b11ff379d17a49d8f85dbc # v2.0.7
-      with:
-        name: code-coverage
-        path: coverage
-    - name: Create HTML output for coverage data
-      run: genhtml coverage/lcov.unit.info coverage/lcov.widget.info --output-directory coverage/html
-    - name: Upload code coverage report to GitHub
-      uses: actions/upload-artifact@726a6dcd0199f578459862705eed35cda05af50b # v2.2.1
-      with:
-        name: code-coverage-report
-        path: coverage/html
+      - name: Clone the repository
+        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2.3.4
+      - name: Draft the release
+        uses: release-drafter/release-drafter@3782ccd1a495040818a9e5d0e8bc4ed22d3b1361 # v5.12.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
