@@ -211,8 +211,8 @@ jobs:
 
     # all
     - name: Archive Flutter symbols
-      run: zip --recurse-paths flutter-${{ matrix.file }}-symbols.zip $FLUTTER_DEBUG_INFO_PATH
-      working-directory: code
+      run: zip --recurse-paths flutter-${{ matrix.file }}-symbols.zip .
+      working-directory: code/${{ env.FLUTTER_DEBUG_INFO_PATH }}
     - name: Upload the artifacts — flutter-${{ matrix.file }}-symbols.zip file
       uses: actions/upload-artifact@726a6dcd0199f578459862705eed35cda05af50b # v2.2.1
       with:
