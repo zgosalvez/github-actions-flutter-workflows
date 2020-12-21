@@ -178,7 +178,7 @@ jobs:
       working-directory: code
 
     # all
-    - name: Upload the artifacts:: ${{ matrix.file }} file # a backup so we don't have to rerun the workflow if we need it
+    - name: Backup the artifacts:: ${{ matrix.file }} file
       uses: actions/upload-artifact@726a6dcd0199f578459862705eed35cda05af50b # v2.2.1
       with:
         name: app.${{ matrix.file }}
