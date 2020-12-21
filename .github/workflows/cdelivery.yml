@@ -107,7 +107,7 @@ jobs:
 
   draft_release:
     name: Draft a release
-    needs: testing
+    needs: coverage_report
     runs-on: ubuntu-latest
     steps:
       - name: Clone the repository
