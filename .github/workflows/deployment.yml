@@ -158,7 +158,7 @@ jobs:
     - name: Set the app version
       uses: microsoft/variable-substitution@6287962da9e5b6e68778dc51e840caa03ca84495 # v1 
       with:
-        files: 'code/pubspec.ya?ml'
+        files: 'code/pubspec.yaml'
       env:
         version: ${{ github.event.release.tag_name }}
 
