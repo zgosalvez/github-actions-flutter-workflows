@@ -5,7 +5,7 @@ on:
     types: [ published ]
 
 env:
-  FLUTTER_DEBUG_INFO_PATH: $FLUTTER_DEBUG_INFO_PATH
+  FLUTTER_DEBUG_INFO_PATH: build/app/outputs/symbols
 
 jobs:
   security_hardening:
