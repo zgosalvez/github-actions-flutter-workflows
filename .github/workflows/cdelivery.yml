@@ -87,5 +87,7 @@ jobs:
     - name: Draft the release
       id: release-drafter
       uses: release-drafter/release-drafter@3782ccd1a495040818a9e5d0e8bc4ed22d3b1361 # v5.12.1
+      with:
+        prerelease: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
