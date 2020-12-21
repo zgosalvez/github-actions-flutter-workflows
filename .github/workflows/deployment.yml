@@ -84,7 +84,6 @@ jobs:
 
   build:
     name: Build the ${{ matrix.file }} file
-    if: matrix.file == 'apk'
     needs: testing
     runs-on: ${{ matrix.os }}
     strategy:
@@ -98,6 +97,9 @@ jobs:
             file: ipa
       fail-fast: false
     steps:
+    - name: Check matrix
+      if: ${{ !(matrix.file == 'apk' && github.event.release.prerelease) || ((matrix.file == 'appbundle' || matrix.file == 'ipa') && !github.event.release.prerelease) }}
+      run: exit
     - name: Clone the repository
       uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2.3.4
       with:
