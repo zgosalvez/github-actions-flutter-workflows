@@ -106,7 +106,7 @@ jobs:
         path: coverage/html
 
   draft_release:
-    name: Draft Release
+    name: Draft release
     needs: testing
     runs-on: ubuntu-latest
     steps:
