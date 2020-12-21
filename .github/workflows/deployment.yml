@@ -20,7 +20,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: The release should not have any existing assets
-      run: echo "${{ toJson(github.event.release.assets) }}"
+      if: join(github.event.release.assets, '') != ''
+      run: |
+        echo "::error::The "${{ github.event.release.name }}" release has preexisting assets. This workflow will not be able to upload build files as release assets."
+        exit 1
 
   testing:
     name: Run ${{ matrix.category }} testing
@@ -83,14 +86,8 @@ jobs:
     # unit testing
     - name: Run Flutter ${{ matrix.category }} tests
       if: matrix.category != 'static'
-      run: flutter test --no-pub --coverage --coverage-path=./coverage/lcov.${{ matrix.category }}.info test/${{ matrix.category }}s
+      run: flutter test --no-pub test/${{ matrix.category }}s
       working-directory: code
-    - name: Upload code coverage to GitHub
-      if: matrix.category != 'static'
-      uses: actions/upload-artifact@726a6dcd0199f578459862705eed35cda05af50b # v2.2.1
-      with:
-        name: code-coverage
-        path: code/coverage/lcov.${{ matrix.category }}.info
 
   build:
     name: Build the ${{ matrix.file }} file
@@ -157,22 +154,35 @@ jobs:
       run: flutter pub get
       working-directory: code
 
+    # all
+    - name: Set the app version
+      uses: microsoft/variable-substitution@6287962da9e5b6e68778dc51e840caa03ca84495 # v1 
+      with:
+        files: 'code/pubspec.ya?ml'
+      env:
+        version: ${{ github.event.release.tag_name }}
+
     # apk
     - name: Build an Android APK file
       if: matrix.file == 'apk'
-      run: flutter build apk --obfuscate --split-debug-info=build/app/outputs/symbols
+      run: |
+        cat pubspec.yaml
+        flutter build apk --obfuscate --split-debug-info=build/app/outputs/symbols
       working-directory: code
     
     # aab
     - name: Build an Android App Bundle file
       if: matrix.file == 'aab'
-      run: flutter build appbundle --obfuscate --split-debug-info=build/app/outputs/symbols
+      run: |
+        cat pubspec.yaml
+        flutter build appbundle --obfuscate --split-debug-info=build/app/outputs/symbols
       working-directory: code
 
     # ipa
     - name: Build an iOS App Store Package file
       if: matrix.file == 'ipa'
       run: |
+        cat pubspec.yaml
         flutter build ios --no-codesign --obfuscate --split-debug-info=build/app/outputs/symbols
         echo "::warning::TODO: fastlane export_ipa"
       working-directory: code

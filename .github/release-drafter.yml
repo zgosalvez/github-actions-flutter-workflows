@@ -6,5 +6,5 @@ categories:
     labels:
       - 'bug'
       - 'security'
-change-template: '• $TITLE — #$NUMBER'
+change-template: '* $TITLE — #$NUMBER'
 template: $CHANGES
