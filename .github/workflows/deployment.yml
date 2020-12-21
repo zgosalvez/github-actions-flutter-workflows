@@ -166,7 +166,7 @@ jobs:
     # aab
     - name: Build an Android App Bundle file
       if: matrix.file == 'aab'
-      run: flutter build aab --obfuscate --split-debug-info=build/app/outputs/symbols
+      run: flutter build appbundle --obfuscate --split-debug-info=build/app/outputs/symbols
       working-directory: code
 
     # ipa
@@ -187,7 +187,7 @@ jobs:
       uses: actions/upload-release-asset@e8f9f06c4b078e705bd2ea027f0926603fc9b4d5 # v1.0.2
       with:
         upload_url: ${{ github.event.release.upload_url }}
-        asset_path: app.${{ matrix.file }}
+        asset_path: ${{ matrix.build-file-path }}
         asset_name: app.${{ matrix.file }}
         asset_content_type: ${{ matrix.asset-content-type }}
       env:
