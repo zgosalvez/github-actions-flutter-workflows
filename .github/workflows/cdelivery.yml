@@ -1,9 +1,8 @@
 name: CDelivery
 
-on: push
-  # FIXME:
-  # push:
-  #   branches: [ main ]
+on:
+  push:
+    branches: [ main ]
 
 jobs:
   security_hardening:

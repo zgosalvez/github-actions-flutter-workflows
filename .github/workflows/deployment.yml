@@ -14,6 +14,14 @@ jobs:
     - name: Ensure SHA pinned actions
       uses: zgosalvez/github-actions-ensure-sha-pinned-actions@e70e07ef05f0a3bf1483fde3c50eeab9c1805041 # v1.0.1
 
+  verify_clean_release:
+    name: Verify a clean release
+    runs-on: ubuntu-latest
+    steps:
+    - name: The release should not have any existing assets
+      run: |
+        echo ${{ fromJson(github.event.release.assets) }}
+
   testing:
     name: Run ${{ matrix.category }} testing
     needs: security_hardening
@@ -94,13 +102,13 @@ jobs:
           - os: ubuntu-latest
             file: apk
           - os: ubuntu-latest
-            file: appbundle
+            file: aab
           - os: macos-latest
             file: ipa
       fail-fast: false
     steps:
     - name: Check matrix
-      if: ${{ !(matrix.file == 'apk' && github.event.release.prerelease) || ((matrix.file == 'appbundle' || matrix.file == 'ipa') && !github.event.release.prerelease) }}
+      if: ${{ !(matrix.file == 'apk' && github.event.release.prerelease) || ((matrix.file == 'aab' || matrix.file == 'ipa') && !github.event.release.prerelease) }}
       run: exit
     - name: Clone the repository
       uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2.3.4
@@ -159,13 +167,13 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
-    # appbundle
+    # aab
     - name: Build an Android App Bundle file
-      if: matrix.file == 'appbundle'
-      run: flutter build appbundle --obfuscate --split-debug-info=build/app/outputs/symbols
+      if: matrix.file == 'aab'
+      run: flutter build aab --obfuscate --split-debug-info=build/app/outputs/symbols
       working-directory: code
     - name: Upload the file
-      if: matrix.file == 'appbundle'
+      if: matrix.file == 'aab'
       uses: actions/upload-release-asset@e8f9f06c4b078e705bd2ea027f0926603fc9b4d5 # v1.0.2
       with:
         upload_url: ${{ github.event.release.upload_url }}
