@@ -1,8 +1,8 @@
 name: Deployment
 
-on: push
-  # release:
-  #   types: [ published ]
+on:
+  release:
+    types: [ published ]
 
 jobs:
   security_hardening:
