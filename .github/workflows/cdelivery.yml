@@ -106,11 +106,10 @@ jobs:
         path: coverage/html
 
   draft_release:
-    name: draft_release
+    name: Draft Release
     needs: testing
     runs-on: ubuntu-latest
     steps:
-      # Drafts your next Release notes as Pull Requests are merged into "master"
       - uses: release-drafter/release-drafter@3782ccd1a495040818a9e5d0e8bc4ed22d3b1361 # v5.12.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
