@@ -7,5 +7,4 @@ categories:
       - 'bug'
       - 'security'
 change-template: '• $TITLE — #$NUMBER'
-no-changes-template: ''
 template: $CHANGES

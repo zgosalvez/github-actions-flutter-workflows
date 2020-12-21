@@ -88,9 +88,10 @@ jobs:
     needs: testing
     runs-on: ubuntu-latest
     steps:
-      - name: Clone the repository
-        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2.3.4
-      - name: Draft the release
-        uses: release-drafter/release-drafter@3782ccd1a495040818a9e5d0e8bc4ed22d3b1361 # v5.12.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Clone the repository
+      uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2.3.4
+    - name: Draft the release
+      id: release-drafter
+      uses: release-drafter/release-drafter@3782ccd1a495040818a9e5d0e8bc4ed22d3b1361 # v5.12.1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
