@@ -171,24 +171,19 @@ jobs:
     # apk
     - name: Build an Android APK file
       if: matrix.file == 'apk'
-      run: |
-        cat pubspec.yaml
-        flutter build apk --obfuscate --split-debug-info=build/app/outputs/symbols
+      run: flutter build apk --obfuscate --split-debug-info=build/app/outputs/symbols
       working-directory: code
     
     # aab
     - name: Build an Android App Bundle file
       if: matrix.file == 'aab'
-      run: |
-        cat pubspec.yaml
-        flutter build appbundle --obfuscate --split-debug-info=build/app/outputs/symbols
+      run: flutter build appbundle --obfuscate --split-debug-info=build/app/outputs/symbols
       working-directory: code
 
     # ipa
     - name: Build an iOS App Store Package file
       if: matrix.file == 'ipa'
       run: |
-        cat pubspec.yaml
         flutter build ios --no-codesign --obfuscate --split-debug-info=build/app/outputs/symbols
         echo "::warning::TODO: fastlane export_ipa"
       working-directory: code
