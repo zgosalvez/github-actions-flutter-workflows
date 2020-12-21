@@ -1,0 +1,116 @@
+name: CDelivery
+
+on: push
+  # FIXME:
+  # push:
+  #   branches: [ main ]
+
+jobs:
+  security_hardening:
+    name: Check security hardening
+    runs-on: ubuntu-latest
+    steps:
+    - name: Clone the repository
+      uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2.3.4
+    - name: Ensure SHA pinned actions
+      uses: zgosalvez/github-actions-ensure-sha-pinned-actions@e70e07ef05f0a3bf1483fde3c50eeab9c1805041 # v1.0.1
+
+  testing:
+    name: Run ${{ matrix.category }} testing
+    needs: security_hardening
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        category: [static, unit, widget]
+    steps:
+    - name: Clone the repository
+      uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2.3.4
+      with:
+        path: code
+    - name: Get Flutter version
+      id: get-flutter-version
+      uses: zgosalvez/github-actions-get-flutter-version-env@8c616b4685d25cceda9bafa61f6c72670f6aa01e # v1.1.1
+      with:
+        pubspec-file-path: code/pubspec.yaml
+    - name: Cache Flutter
+      id: flutter-cache
+      uses: actions/cache@0781355a23dac32fd3bac414512f4b903437991a # v2.1.3
+      with:
+        path: flutter
+        key: ${{ env.cache-name }}-${{ steps.get-flutter-version.outputs.version }}-${{ hashFiles('code/pubspec.lock') }}
+        restore-keys: |
+          ${{ env.cache-name }}-${{ steps.get-flutter-version.outputs.version }}-
+          ${{ env.cache-name }}-
+      env:
+        cache-name: flutter-cache
+    - name: Clone the Flutter repository
+      if: steps.flutter-cache.outputs.cache-hit != 'true'
+      uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2.3.4
+      with:
+        repository: flutter/flutter
+        ref: ${{ steps.get-flutter-version.outputs.version }}
+        path: flutter
+    - name: Add the flutter tool to the path
+      run: |
+        echo "$GITHUB_WORKSPACE/flutter/bin" >> $GITHUB_PATH
+        echo "$GITHUB_WORKSPACE/flutter/bin/cache/dart-sdk/bin" >> $GITHUB_PATH
+    - name: Populate the Flutter tool's cache of binary artifacts
+      if: steps.flutter-cache.outputs.cache-hit != 'true'
+      run: |
+        flutter config --no-analytics
+        flutter precache
+    - name: Get Flutter packages
+      run: flutter pub get
+      working-directory: code
+
+    # static testing
+    - name: Analyze Flutter
+      if: matrix.category == 'static'
+      uses: zgosalvez/github-actions-analyze-flutter@f1a0a3abe4211723932c4d5571702c8f71e11f20 # v1.3.0
+      with:
+        fail-on-warnings: true
+        working-directory: code
+    
+    # unit testing
+    - name: Run Flutter ${{ matrix.category }} tests
+      if: matrix.category != 'static'
+      run: flutter test --no-pub --coverage --coverage-path=./coverage/lcov.${{ matrix.category }}.info test/${{ matrix.category }}s
+      working-directory: code
+    - name: Upload code coverage to GitHub
+      if: matrix.category != 'static'
+      uses: actions/upload-artifact@726a6dcd0199f578459862705eed35cda05af50b # v2.2.1
+      with:
+        name: code-coverage
+        path: code/coverage/lcov.${{ matrix.category }}.info
+
+  coverage_report:
+    name: Generate coverage report
+    needs: testing
+    runs-on: ubuntu-latest
+    steps:
+    - name: Clone the repository
+      uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2.3.4
+    - name: Install lcov
+      run: sudo apt-get install lcov
+    - name: Download code coverage from GitHub
+      uses: actions/download-artifact@f144d3c3916a86f4d6b11ff379d17a49d8f85dbc # v2.0.7
+      with:
+        name: code-coverage
+        path: coverage
+    - name: Create HTML output for coverage data
+      run: genhtml coverage/lcov.unit.info coverage/lcov.widget.info --output-directory coverage/html
+    - name: Upload code coverage report to GitHub
+      uses: actions/upload-artifact@726a6dcd0199f578459862705eed35cda05af50b # v2.2.1
+      with:
+        name: code-coverage-report
+        path: coverage/html
+
+  draft_release:
+    name: draft_release
+    needs: testing
+    runs-on: ubuntu-latest
+    steps:
+      # Drafts your next Release notes as Pull Requests are merged into "master"
+      - uses: release-drafter/release-drafter@3782ccd1a495040818a9e5d0e8bc4ed22d3b1361 # v5.12.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
