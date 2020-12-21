@@ -83,28 +83,6 @@ jobs:
         name: code-coverage
         path: code/coverage/lcov.${{ matrix.category }}.info
 
-  coverage_report:
-    name: Generate coverage report
-    needs: testing
-    runs-on: ubuntu-latest
-    steps:
-    - name: Clone the repository
-      uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2.3.4
-    - name: Install lcov
-      run: sudo apt-get install lcov
-    - name: Download code coverage from GitHub
-      uses: actions/download-artifact@f144d3c3916a86f4d6b11ff379d17a49d8f85dbc # v2.0.7
-      with:
-        name: code-coverage
-        path: coverage
-    - name: Create HTML output for coverage data
-      run: genhtml coverage/lcov.unit.info coverage/lcov.widget.info --output-directory coverage/html
-    - name: Upload code coverage report to GitHub
-      uses: actions/upload-artifact@726a6dcd0199f578459862705eed35cda05af50b # v2.2.1
-      with:
-        name: code-coverage-report
-        path: coverage/html
-
   draft_release:
     name: Draft a release
     needs: coverage_report
@@ -113,24 +91,6 @@ jobs:
       - name: Clone the repository
         uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2.3.4
       - name: Draft the release
-        id: draft-release
         uses: release-drafter/release-drafter@3782ccd1a495040818a9e5d0e8bc4ed22d3b1361 # v5.12.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Download the code coverage report
-        uses: actions/download-artifact@c3f5d00c8784369c43779f3d2611769594a61f7a # v2
-        with:
-          name: code-coverage-report
-          path: coverage/html
-      - name: Archive the code coverage report
-        run: zip --recurse-paths ../../code-coverage-report ./
-        working-directory: coverage/html
-      - name: Upload the code coverage report
-        uses: actions/upload-release-asset@e8f9f06c4b078e705bd2ea027f0926603fc9b4d5 # v1.0.2
-        with:
-          upload_url: ${{ steps.draft-release.outputs.upload_url }}
-          asset_path: code-coverage-report.zip
-          asset_name: code-coverage-report.zip
-          asset_content_type: application/zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
