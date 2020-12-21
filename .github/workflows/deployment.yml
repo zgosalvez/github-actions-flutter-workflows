@@ -101,10 +101,16 @@ jobs:
         include:
           - os: ubuntu-latest
             file: apk
+            build-file-path: code/build/app/outputs/flutter-apk/app-release.apk
+            asset-content-type: application/java-archive
           - os: ubuntu-latest
             file: aab
+            build-file-path: code/build/app/outputs/bundle/release/app-release.aab
+            asset-content-type: application/zip
           - os: macos-latest
             file: ipa
+            build-file-path: code/build/ios/iphoneos/Runner.app
+            asset-content-type: inode/directory
       fail-fast: false
     steps:
     - name: Check matrix
@@ -156,32 +162,12 @@ jobs:
       if: matrix.file == 'apk'
       run: flutter build apk --obfuscate --split-debug-info=build/app/outputs/symbols
       working-directory: code
-    - name: Upload the file
-      if: matrix.file == 'apk'
-      uses: actions/upload-release-asset@e8f9f06c4b078e705bd2ea027f0926603fc9b4d5 # v1.0.2
-      with:
-        upload_url: ${{ github.event.release.upload_url }}
-        asset_path: code/build/app/outputs/flutter-apk/app-release.apk
-        asset_name: app-release.apk
-        asset_content_type: application/java-archive
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
     # aab
     - name: Build an Android App Bundle file
       if: matrix.file == 'aab'
       run: flutter build aab --obfuscate --split-debug-info=build/app/outputs/symbols
       working-directory: code
-    - name: Upload the file
-      if: matrix.file == 'aab'
-      uses: actions/upload-release-asset@e8f9f06c4b078e705bd2ea027f0926603fc9b4d5 # v1.0.2
-      with:
-        upload_url: ${{ github.event.release.upload_url }}
-        asset_path: code/build/app/outputs/bundle/release/app-release.aab
-        asset_name: app-release.aab
-        asset_content_type: application/zip
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     # ipa
     - name: Build an iOS App Store Package file
@@ -190,13 +176,19 @@ jobs:
         flutter build ios --no-codesign --obfuscate --split-debug-info=build/app/outputs/symbols
         echo "::warning::TODO: fastlane export_ipa"
       working-directory: code
-    - name: Upload the file
-      if: matrix.file == 'ipa'
+
+    # all
+    - name: Backup the artifacts — ${{ matrix.file }} file
+      uses: actions/upload-artifact@726a6dcd0199f578459862705eed35cda05af50b # v2.2.1
+      with:
+        name: app.${{ matrix.file }}
+        path: ${{ matrix.build-file-path }}
+    - name: Upload the release assets — ${{ matrix.file }} file
       uses: actions/upload-release-asset@e8f9f06c4b078e705bd2ea027f0926603fc9b4d5 # v1.0.2
       with:
         upload_url: ${{ github.event.release.upload_url }}
-        asset_path: code/build/ios/iphoneos/Runner.app
-        asset_name: Runner.app
-        asset_content_type: inode/directory
+        asset_path: app.${{ matrix.file }}
+        asset_name: app.${{ matrix.file }}
+        asset_content_type: ${{ matrix.asset-content-type }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
