@@ -11,8 +11,8 @@ jobs:
     steps:
     - name: Clone the repository
       uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2.3.4
-    - name: Ensure SHA pinned actions
-      uses: zgosalvez/github-actions-ensure-sha-pinned-actions@e70e07ef05f0a3bf1483fde3c50eeab9c1805041 # v1.0.1
+    # - name: Ensure SHA pinned actions
+      # uses: zgosalvez/github-actions-ensure-sha-pinned-actions@e70e07ef05f0a3bf1483fde3c50eeab9c1805041 # v1.0.1
 
   testing:
     name: Run ${{ matrix.category }} testing
@@ -91,17 +91,15 @@ jobs:
     steps:
     - name: Clone the repository
       uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2.3.4
-    - name: Install lcov
-      run: sudo apt-get install lcov
     - name: Download code coverage from GitHub
       uses: actions/download-artifact@f144d3c3916a86f4d6b11ff379d17a49d8f85dbc # v2.0.7
       with:
         name: code-coverage
         path: coverage
-    - name: Create HTML output for coverage data
-      run: genhtml coverage/lcov.unit.info coverage/lcov.widget.info --output-directory coverage/html
-    - name: Upload code coverage report to GitHub
-      uses: actions/upload-artifact@726a6dcd0199f578459862705eed35cda05af50b # v2.2.1
+    - name: Report code coverage
+      uses: zgosalvez/github-actions-report-lcov@6c1bcd0451bee80a1ddedf6fbdd62a5d4e740e1b # v1.0.0
       with:
-        name: code-coverage-report
-        path: coverage/html
+        coverage-files: coverage/lcov.*.info
+        minimum-coverage: 90
+        artifact-name: code-coverage-report
+        github-token: ${{ secrets.GITHUB_TOKEN }}
