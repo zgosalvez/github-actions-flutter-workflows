@@ -13461,7 +13461,7 @@ async function run() {
   try {
     await exec.exec('sudo apt-get install lcov');
 
-    const tmpPath = path.resolve(process.env.GITHUB_ACTION_PATH, 'tmp');
+    const tmpPath = path.resolve(github.context.action_path, 'tmp');
     const coverageFiles = core.getInput('coverage-files');
 
     await genhtml(coverageFiles, tmpPath);
@@ -13509,7 +13509,7 @@ async function genhtml(coverageFiles, tmpPath) {
 
 async function mergeCoverages(coverageFiles, tmpPath) {
   const coverageFile = path.resolve(tmpPath, 'lcov.info');
-  const lcovResultMerger = path.resolve(process.env.GITHUB_ACTION_PATH, 'node_modules/.bin/lcov-result-merger');
+  const lcovResultMerger = path.resolve(github.context.action_path, 'node_modules/.bin/lcov-result-merger');
 
   await exec.exec(lcovResultMerger, [
     coverageFiles,
