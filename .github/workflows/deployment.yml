@@ -4,9 +4,6 @@ on:
   release:
     types: [ published ]
 
-env:
-  FLUTTER_DEBUG_INFO_PATH: build/app/outputs/symbols
-
 jobs:
   security_hardening:
     name: Check security hardening
@@ -101,17 +98,16 @@ jobs:
         include:
           - os: ubuntu-latest
             file: apk
-            build-file-path: code/build/app/outputs/flutter-apk/app-release.apk
             asset-content-type: application/java-archive
           - os: ubuntu-latest
             file: aab
-            build-file-path: code/build/app/outputs/bundle/release/app-release.aab
             asset-content-type: application/zip
           - os: macos-latest
             file: ipa
-            build-file-path: code/build/ios/iphoneos/Runner.app
-            asset-content-type: inode/directory
+            asset-content-type: application/octet-stream
       fail-fast: false
+    env:
+      FLUTTER_DEBUG_INFO_PATH: build/app/outputs/symbols
     steps:
     - name: Check matrix
       if: ${{ !(matrix.file == 'apk' && github.event.release.prerelease) || ((matrix.file == 'aab' || matrix.file == 'ipa') && !github.event.release.prerelease) }}
@@ -174,13 +170,19 @@ jobs:
     # apk
     - name: Build an Android APK file
       if: matrix.file == 'apk'
-      run: flutter build apk --obfuscate --split-debug-info=$FLUTTER_DEBUG_INFO_PATH
+      run: |
+        flutter build apk --obfuscate --split-debug-info=$FLUTTER_DEBUG_INFO_PATH
+        mv build/app/outputs/flutter-apk/app-release.apk app.apk
+        mv code/build/app/outputs/mapping/release/mapping.txt apk-mapping.txt
       working-directory: code
     
     # aab
     - name: Build an Android App Bundle file
       if: matrix.file == 'aab'
-      run: flutter build appbundle --obfuscate --split-debug-info=$FLUTTER_DEBUG_INFO_PATH
+      run: |
+        flutter build appbundle --obfuscate --split-debug-info=$FLUTTER_DEBUG_INFO_PATH
+        mv code/build/app/outputs/bundle/release/app-release.aab app.aab
+        mv code/build/app/outputs/mapping/release/mapping.txt aab-mapping.txt
       working-directory: code
 
     # apk/aab
@@ -189,13 +191,13 @@ jobs:
       uses: actions/upload-artifact@726a6dcd0199f578459862705eed35cda05af50b # v2.2.1
       with:
         name: ${{ matrix.file }}-mapping.txt
-        path: code/build/app/outputs/mapping/release/mapping.txt
+        path: ${{ matrix.file }}-mapping.txt
     - name: Upload the release assets — ${{ matrix.file }}-mapping.txt file
       if: matrix.file == 'apk' || matrix.file == 'aab'
       uses: actions/upload-release-asset@e8f9f06c4b078e705bd2ea027f0926603fc9b4d5 # v1.0.2
       with:
         upload_url: ${{ github.event.release.upload_url }}
-        asset_path:  code/build/app/outputs/mapping/release/mapping.txt
+        asset_path: ${{ matrix.file }}-mapping.txt
         asset_name: ${{ matrix.file }}-mapping.txt
         asset_content_type: text/plain
       env:
@@ -207,6 +209,7 @@ jobs:
       run: |
         flutter build ios --no-codesign --obfuscate --split-debug-info=$FLUTTER_DEBUG_INFO_PATH
         echo "::warning::TODO: fastlane export_ipa"
+        echo "TODO: mv code/build/app/outputs/ipa/app.ipa app.ipa"
       working-directory: code
 
     # all
@@ -232,6 +235,7 @@ jobs:
       with:
         name: app.${{ matrix.file }}
         path: ${{ matrix.build-file-path }}
+        if-no-files-found: error
     - name: Upload the release assets — ${{ matrix.file }} file
       uses: actions/upload-release-asset@e8f9f06c4b078e705bd2ea027f0926603fc9b4d5 # v1.0.2
       with:
