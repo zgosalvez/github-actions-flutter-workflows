@@ -97,7 +97,7 @@ jobs:
         name: code-coverage
         path: coverage
     - name: Report code coverage
-      uses: ./.gitub/workflows/actions/gitub-actions-report-lcov
+      uses: ./.github/workflows/actions/gitub-actions-report-lcov
       with:
         coverage-files: coverage/lcov.*.info
         artifact-name: code-coverage-report
