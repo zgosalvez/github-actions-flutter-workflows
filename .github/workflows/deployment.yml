@@ -173,7 +173,7 @@ jobs:
       run: |
         flutter build apk --obfuscate --split-debug-info=$FLUTTER_DEBUG_INFO_PATH
         mv build/app/outputs/flutter-apk/app-release.apk app.apk
-        mv code/build/app/outputs/mapping/release/mapping.txt apk-mapping.txt
+        mv build/app/outputs/mapping/release/mapping.txt apk-mapping.txt
       working-directory: code
     
     # aab
@@ -181,8 +181,8 @@ jobs:
       if: matrix.file == 'aab'
       run: |
         flutter build appbundle --obfuscate --split-debug-info=$FLUTTER_DEBUG_INFO_PATH
-        mv code/build/app/outputs/bundle/release/app-release.aab app.aab
-        mv code/build/app/outputs/mapping/release/mapping.txt aab-mapping.txt
+        mv build/app/outputs/bundle/release/app-release.aab app.aab
+        mv build/app/outputs/mapping/release/mapping.txt aab-mapping.txt
       working-directory: code
 
     # apk/aab

@@ -89,8 +89,8 @@ jobs:
     needs: testing
     runs-on: ubuntu-latest
     steps:
-    - name: Clone the repository
-      uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2.3.4
+    # - name: Clone the repository
+    #   uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2.3.4
     - name: Download code coverage from GitHub
       uses: actions/download-artifact@f144d3c3916a86f4d6b11ff379d17a49d8f85dbc # v2.0.7
       with:
