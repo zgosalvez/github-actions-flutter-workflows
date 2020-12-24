@@ -91,17 +91,13 @@ jobs:
     steps:
     - name: Clone the repository
       uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2.3.4
-    - name: Install lcov
-      run: sudo apt-get install lcov
     - name: Download code coverage from GitHub
       uses: actions/download-artifact@f144d3c3916a86f4d6b11ff379d17a49d8f85dbc # v2.0.7
       with:
         name: code-coverage
         path: coverage
-    - name: Create HTML output for coverage data
-      run: genhtml coverage/lcov.unit.info coverage/lcov.widget.info --output-directory coverage/html
-    - name: Upload code coverage report to GitHub
-      uses: actions/upload-artifact@726a6dcd0199f578459862705eed35cda05af50b # v2.2.1
+    - name: Report code coverage
+      uses: ./gitub/workflows/actions/gitub-actions-report-lcov
       with:
-        name: code-coverage-report
-        path: coverage/html
+        coverage-files: coverage/lcov.*.info
+        artifact-name: code-coverage-report

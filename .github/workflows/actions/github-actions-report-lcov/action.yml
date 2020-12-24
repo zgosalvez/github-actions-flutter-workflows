@@ -1,0 +1,23 @@
+# https://github.com/actions/javascript-action
+
+name: 'Ensure SHA Pinned Actions'
+description: 'Ensure that GitHub Actions are pinned to full length commit SHAs'
+author: 'Zennon Gosalvez'
+inputs:
+  coverage-files:
+    description: 'The action fails if any warning was found. This will always fail on errors. Optional. Default: `false`'
+    required: true
+  artifact-name:
+    description: 'The action fails if any warning was found. This will always fail on errors. Optional. Default: `false`'
+    required: true
+  minimum-coverage:
+    description: 'The action fails if any warning was found. This will always fail on errors. Optional. Default: `false`'
+    default: 0
+  github-token:
+    description: 'The action fails if any warning was found. This will always fail on errors. Optional. Default: `false`'
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
+branding:
+  icon: umbrella
+  color: purple
