@@ -11,6 +11,16 @@ Create workflows in your `.github/workflows` directory. Examples are available i
 
 *Note:* Although this Flutter project works as-is, consider tailoring these workflows to your needs. If you're starting from scratch, copying and pasting will work as long as you follow the [GitHub flow](https://guides.github.com/introduction/flow/) and [release based workflow](https://lab.github.com/githubtraining/create-a-release-based-workflow).
 
+### Protected Branches
+Recommended rules for the `main` and `release/v*` branches:
+- [x] Require status checks to pass before merging
+  - [x] Require branches to be up to date before merging
+  - [x] Check security hardening
+  - [x] Generate coverage report
+  - [x] Run static testing
+  - [x] Run unit testing
+  - [x] Run widget testing
+
 ### Workflows
 
 - All of the workflows here use the [Ensure SHA Pinned Actions](https://github.com/marketplace/actions/ensure-sha-pinned-actions) action to ensure security hardening.
@@ -31,6 +41,10 @@ Also known as CI, Continuous Integration runs Flutter static and dynamic tests o
 Also known as CDelivery (not to be mistaken with another CD, i.e., Continuous Deployment), Continuous Delivery reruns the same Flutter static and dynamic tests from the CI on *every push* to `main` and `release/v*`, then a pre-release draft is created or updated. This ensures that the protected branches are bug-free and drafted release is updated. Manually remove the pre-release mark after it has been deployed and released to the app store.
 
 *Note:* Since CDelivery reruns the `testing` job from CI, it will cost you additional runner minutes. If you are conscious of your budget and [require branches to be up to date before merging](https://docs.github.com/en/free-pro-team@latest/github/administering-a-repository/enabling-required-status-checks#:~:text=Require%20branches%20to%20be%20up%20to%20date%20before%20merging), you should comment the job out.
+
+[`.github/workflows/pull_request-opened.yml`](workflows/pull_request-opened.yml)
+
+To draft the release this workflow uses the [Release Drafter](https://github.com/marketplace/actions/release-drafter) action to compile the pull requests and categorizes it using the [PR Labeler](https://github.com/marketplace/actions/pr-labeler) action. Add the [`.github/release-drafter.yml`](release-drafter.yml) and [`.github/pr-labeler.yml`](pr-labeler.yml) files in your project since these are required configurations for these actions, respectively. Customize the configuration files as needed.
 
 #### Deployment
 [![Deployment](https://github.com/zgosalvez/github-actions-flutter-workflow/workflows/Deployment/badge.svg)](https://github.com/zgosalvez/github-actions-flutter-workflow/actions?query=workflow%3ADeployment)

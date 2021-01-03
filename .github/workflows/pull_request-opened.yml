@@ -1,0 +1,21 @@
+name: Pull Request (Opened)
+
+on:
+  pull_request:
+    types: [opened]
+
+jobs:
+  assign_author:
+    name: Assign Author to the Pull Request
+    runs-on: ubuntu-latest
+    steps:
+    - name: Assign Author to the Pull Request
+      uses: technote-space/assign-author@6252488282b99652aef47451a353eb88aea24666 # v1.5.7
+
+  pr-labeler:
+    name: Label the PR based on the branch
+    runs-on: ubuntu-latest
+    steps:
+    - uses: TimonVS/pr-labeler-action@bd0b592a410983316a454e3d48444608f028ec8e # v3.1.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
