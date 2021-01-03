@@ -16,6 +16,7 @@ Recommended rules for the `main` and `release/v*` branches:
 - [x] Require status checks to pass before merging
   - [x] Require branches to be up to date before merging
   - [x] Check security hardening
+  - [x] Generate coverage report
   - [x] Run static testing
   - [x] Run unit testing
   - [x] Run widget testing
