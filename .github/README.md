@@ -24,7 +24,7 @@ Recommended rules for the `main` and `release/v*` branches:
 ### Workflows
 
 - All of the workflows here use the [Ensure SHA Pinned Actions](https://github.com/marketplace/actions/ensure-sha-pinned-actions) action to ensure security hardening.
-- The [Get the Flutter Version Environment](https://github.com/marketplace/actions/get-the-flutter-version-environment) action requires that the [`pubspec.yaml`](pubspec.yaml) file contains an `environment:flutter:` key, which is used for installing Flutter with the correct version.
+- The [Get the Flutter Version Environment](https://github.com/marketplace/actions/get-the-flutter-version-environment) action requires that the [`pubspec.yaml`](../pubspec.yaml#L22) file contains an `environment:flutter:` key, which is used for installing Flutter with the correct version.
 
 #### Continuous Integration
 [![CI](https://github.com/zgosalvez/github-actions-flutter-workflow/workflows/CI/badge.svg)](https://github.com/zgosalvez/github-actions-flutter-workflow/actions?query=workflow%3ACI)
@@ -38,7 +38,7 @@ Also known as CI, Continuous Integration runs Flutter static and dynamic tests o
 
 [`.github/workflows/cdelivery.yml`](workflows/cdelivery.yml)
 
-Also known as CDelivery (not to be mistaken with another CD, i.e., Continuous Deployment), Continuous Delivery drafts a pre-release on *every push* to `main` and `release/v*`. This ensures that the drafted release is created or updated. Manually remove the pre-release mark after it has been deployed and released to the app store.
+Also known as CDelivery (not to be mistaken with another CD, i.e., Continuous Deployment), Continuous Delivery drafts a pre-release on *every push* to `main`. For the draft to populate with the release notes, pull requests should be `main` based. Manually remove the pre-release mark after it has been deployed and released to the app store.
 
 [`.github/workflows/pull_request-opened.yml`](workflows/pull_request-opened.yml)
 
