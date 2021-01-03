@@ -38,9 +38,7 @@ Also known as CI, Continuous Integration runs Flutter static and dynamic tests o
 
 [`.github/workflows/cdelivery.yml`](workflows/cdelivery.yml)
 
-Also known as CDelivery (not to be mistaken with another CD, i.e., Continuous Deployment), Continuous Delivery reruns the same Flutter static and dynamic tests from the CI on *every push* to `main` and `release/v*`, then a pre-release draft is created or updated. This ensures that the protected branches are bug-free and drafted release is updated. Manually remove the pre-release mark after it has been deployed and released to the app store.
-
-*Note:* Since CDelivery reruns the `testing` job from CI, it will cost you additional runner minutes. If you are conscious of your budget and [require branches to be up to date before merging](https://docs.github.com/en/free-pro-team@latest/github/administering-a-repository/enabling-required-status-checks#:~:text=Require%20branches%20to%20be%20up%20to%20date%20before%20merging), you should comment the job out.
+Also known as CDelivery (not to be mistaken with another CD, i.e., Continuous Deployment), Continuous Delivery drafts a pre-release on *every push* to `main` and `release/v*`. This ensures that the drafted release is created or updated. Manually remove the pre-release mark after it has been deployed and released to the app store.
 
 [`.github/workflows/pull_request-opened.yml`](workflows/pull_request-opened.yml)
 
