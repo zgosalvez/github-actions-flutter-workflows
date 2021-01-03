@@ -3,7 +3,7 @@
 This sample project allows you to leverage GitHub Actions to run common Flutter workflows. These are based on the workflows found in the [Flutter Gallery](https://github.com/flutter/gallery) repository. Continue reading to apply these to your Flutter project.
 
 ## Disclaimer
-This is still in active development, and it currently supports iOS and Android deployments only. Please [open a pull request](.CONTRIBUTING.md) to support other platforms.
+This is still in active development, and it currently supports iOS and Android deployments only. Please [open a pull request](CONTRIBUTING.md) to support other platforms.
 
 ## Usage
 
