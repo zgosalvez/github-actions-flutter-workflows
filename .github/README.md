@@ -31,7 +31,7 @@ Recommended rules for the `main` and `release/v*` branches:
 
 [`.github/workflows/ci.yml`](workflows/ci.yml)
 
-Also known as CI, Continuous Integration runs Flutter static and dynamic tests on *every pull request* to `main` and `release/v*`, then the coverage report is stored as an artifact for reference. A comment is added to the pull request on every run as seen here, https://github.com/zgosalvez/github-actions-flutter-workflows/pull/9#issuecomment-750863281. Modify the workflow to further process the code coverage file using [code quality](https://github.com/marketplace?type=actions) or [code review](https://github.com/marketplace?category=code-review&type=actions) actions.
+Also known as CI, Continuous Integration runs Flutter static and dynamic tests on *every pull request* to `main` and `release/v*`, then the coverage report is stored as an artifact for reference. A comment is added to the pull request on every run as seen here, [#10 (comment)](https://github.com/zgosalvez/github-actions-flutter-workflows/pull/10#issuecomment-753592566). Modify the workflow to further process the code coverage file using [code quality](https://github.com/marketplace?type=actions) or [code review](https://github.com/marketplace?category=code-review&type=actions) actions.
 
 #### Continuous Delivery
 [![CDelivery](https://github.com/zgosalvez/github-actions-flutter-workflow/workflows/CDelivery/badge.svg)](https://github.com/zgosalvez/github-actions-flutter-workflow/actions?query=workflow%3ACDelivery)
