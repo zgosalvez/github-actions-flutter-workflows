@@ -11,6 +11,19 @@ Create workflows in your `.github/workflows` directory. Examples are available i
 
 *Note:* Although this Flutter project works as-is, consider tailoring these workflows to your needs. If you're starting from scratch, copying and pasting will work as long as you follow the [GitHub flow](https://guides.github.com/introduction/flow/) and [release based workflow](https://lab.github.com/githubtraining/create-a-release-based-workflow).
 
+### Protected Branches
+
+Enable the following rules for the `main` and `release/v*` branches:
+- [x] Require status checks to pass before merging
+  - [x] Require branches to be up to date before merging (Recommended)
+  - [x] Check security hardening
+  - [x] Run static testing
+  - [x] Run unit testing
+  - [x] Run widget testing
+- [x] Require signed commits (Recommended)
+- [x] Require linear history (Recommended)
+- [x] Include administrators (Recommended)
+
 ### Workflows
 
 - All of the workflows here use the [Ensure SHA Pinned Actions](https://github.com/marketplace/actions/ensure-sha-pinned-actions) action to ensure security hardening.
