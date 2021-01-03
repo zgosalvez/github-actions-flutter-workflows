@@ -2,7 +2,9 @@ name: CDelivery
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
+      - release/v*
 
 jobs:
   security_hardening:
