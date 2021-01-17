@@ -53,5 +53,9 @@ To draft the release this workflow uses the [Release Drafter](https://github.com
 
 Deployment is triggered when the release draft (or any release) is published. It reruns the same Flutter static and dynamic tests from the CI before running Flutter's build commands. The app version used is based on the release tag, not the name. Lastly, build artifacts are uploaded as release assets.
 
+### Dependabot
+
+This includes a [`.github/dependabot.yml`](dependabot.yml) file that allows Dependabot to maintain the GitHub Actions used in these workflows. For more information, see the GitHub Documentation for [Keeping your dependencies updated automatically](https://docs.github.com/en/github/administering-a-repository/keeping-your-dependencies-updated-automatically).
+
 ## License
 The scripts and documentation in this project are released under the [MIT License](LICENSE)
