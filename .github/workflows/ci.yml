@@ -12,9 +12,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Clone the repository
-      uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2.3.4
+      uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
     - name: Ensure SHA pinned actions
-      uses: zgosalvez/github-actions-ensure-sha-pinned-actions@e70e07ef05f0a3bf1483fde3c50eeab9c1805041 # v1.0.1
+      uses: zgosalvez/github-actions-ensure-sha-pinned-actions@e70e07ef05f0a3bf1483fde3c50eeab9c1805041
 
   testing:
     name: Run ${{ matrix.category }} testing
@@ -26,17 +26,17 @@ jobs:
       fail-fast: false
     steps:
     - name: Clone the repository
-      uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2.3.4
+      uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
       with:
         path: code
     - name: Get Flutter version
       id: get-flutter-version
-      uses: zgosalvez/github-actions-get-flutter-version-env@2106839043b63948638cf22ee33718862fdcc57d # v1.1.2
+      uses: zgosalvez/github-actions-get-flutter-version-env@2106839043b63948638cf22ee33718862fdcc57d
       with:
         pubspec-file-path: code/pubspec.yaml
     - name: Cache Flutter
       id: flutter-cache
-      uses: actions/cache@0781355a23dac32fd3bac414512f4b903437991a # v2.1.3
+      uses: actions/cache@0781355a23dac32fd3bac414512f4b903437991a
       with:
         path: flutter
         key: ${{ env.cache-name }}-ubuntu-latest-${{ steps.get-flutter-version.outputs.version }}-${{ hashFiles('code/pubspec.lock') }}
@@ -48,7 +48,7 @@ jobs:
         cache-name: flutter-cache
     - name: Clone the Flutter repository
       if: steps.flutter-cache.outputs.cache-hit != 'true'
-      uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2.3.4
+      uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
       with:
         repository: flutter/flutter
         ref: ${{ steps.get-flutter-version.outputs.version }}
@@ -66,22 +66,22 @@ jobs:
       run: flutter pub get
       working-directory: code
 
-    # static testing
+   
     - name: Analyze Flutter
       if: matrix.category == 'static'
-      uses: zgosalvez/github-actions-analyze-dart@17a5ca792b39421bdaace447ba65be49af8d907d # v1.4.0
+      uses: zgosalvez/github-actions-analyze-dart@17a5ca792b39421bdaace447ba65be49af8d907d
       with:
         fail-on-warnings: true
         working-directory: code
     
-    # unit testing
+   
     - name: Run Flutter ${{ matrix.category }} tests
       if: matrix.category != 'static'
       run: flutter test --no-pub --coverage --coverage-path=./coverage/lcov.${{ matrix.category }}.info test/${{ matrix.category }}s
       working-directory: code
     - name: Upload code coverage to GitHub
       if: matrix.category != 'static'
-      uses: actions/upload-artifact@726a6dcd0199f578459862705eed35cda05af50b # v2.2.1
+      uses: actions/upload-artifact@726a6dcd0199f578459862705eed35cda05af50b
       with:
         name: code-coverage
         path: code/coverage/lcov.${{ matrix.category }}.info
@@ -92,14 +92,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Clone the repository
-      uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2.3.4
+      uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
     - name: Download code coverage from GitHub
-      uses: actions/download-artifact@4a7a711286f30c025902c28b541c10e147a9b843 # v2.0.7
+      uses: actions/download-artifact@4a7a711286f30c025902c28b541c10e147a9b843
       with:
         name: code-coverage
         path: coverage
     - name: Report code coverage
-      uses: zgosalvez/github-actions-report-lcov@dbddb87c1dcd9525e7ebb88700278d58ec7b2f9e # v1.1.0
+      uses: zgosalvez/github-actions-report-lcov@dbddb87c1dcd9525e7ebb88700278d58ec7b2f9e
       with:
         coverage-files: coverage/lcov.*.info
         minimum-coverage: 90
