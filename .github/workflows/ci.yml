@@ -13,8 +13,8 @@ jobs:
     steps:
     - name: Clone the repository
       uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
-    # - name: Ensure SHA pinned actions
-    #   uses: zgosalvez/github-actions-ensure-sha-pinned-actions@90071c65175ec9fe440689658750fac7db600f4c
+    - name: Ensure SHA pinned actions
+      uses: zgosalvez/github-actions-ensure-sha-pinned-actions@90071c65175ec9fe440689658750fac7db600f4c
 
   testing:
     name: Run ${{ matrix.category }} testing
@@ -95,7 +95,7 @@ jobs:
         name: code-coverage
         path: coverage
     - name: Report code coverage
-      uses: zgosalvez/github-actions-report-lcov@feature/impacted-files
+      uses: zgosalvez/github-actions-report-lcov@d5ce50e89a74f4e59c4fc8179fb80f72faf70c22
       with:
         coverage-files: coverage/lcov.*.info
         minimum-coverage: 90
