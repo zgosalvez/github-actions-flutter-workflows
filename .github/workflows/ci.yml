@@ -89,8 +89,6 @@ jobs:
     steps:
     - name: Clone the repository
       uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
-      with:
-        path: code
     - name: Download code coverage from GitHub
       uses: actions/download-artifact@4a7a711286f30c025902c28b541c10e147a9b843
       with:
@@ -103,4 +101,3 @@ jobs:
         minimum-coverage: 90
         artifact-name: code-coverage-report
         github-token: ${{ secrets.GITHUB_TOKEN }}
-        working-directory: code
