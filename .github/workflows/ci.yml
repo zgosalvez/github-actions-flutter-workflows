@@ -13,8 +13,8 @@ jobs:
     steps:
     - name: Clone the repository
       uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
-    # - name: Ensure SHA pinned actions
-      # uses: zgosalvez/github-actions-ensure-sha-pinned-actions@90071c65175ec9fe440689658750fac7db600f4c
+    - name: Ensure SHA pinned actions
+      uses: zgosalvez/github-actions-ensure-sha-pinned-actions@90071c65175ec9fe440689658750fac7db600f4c
 
   testing:
     name: Run ${{ matrix.category }} testing
@@ -71,7 +71,6 @@ jobs:
       with:
         fail-on-warnings: true
         working-directory: code
-        line-length: 5
     - name: Run Flutter ${{ matrix.category }} tests
       if: matrix.category != 'static'
       run: flutter test --no-pub --coverage --coverage-path=./coverage/lcov.${{ matrix.category }}.info test/${{ matrix.category }}s
