@@ -71,6 +71,7 @@ jobs:
       with:
         fail-on-warnings: true
         working-directory: code
+        line-length: 5
     - name: Run Flutter ${{ matrix.category }} tests
       if: matrix.category != 'static'
       run: flutter test --no-pub --coverage --coverage-path=./coverage/lcov.${{ matrix.category }}.info test/${{ matrix.category }}s
