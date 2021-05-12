@@ -31,7 +31,7 @@ jobs:
         path: code
     - name: Get Flutter version
       id: get-flutter-version
-      uses: zgosalvez/github-actions-get-flutter-version-env@2106839043b63948638cf22ee33718862fdcc57d
+      uses: zgosalvez/github-actions-get-flutter-version-env@c42d52443c496fb9648dd05d05ca6840b72a555e
       with:
         pubspec-file-path: code/pubspec.yaml
     - name: Cache Flutter
