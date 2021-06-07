@@ -45,7 +45,7 @@ jobs:
         pubspec-file-path: code/pubspec.yaml
     - name: Cache Flutter
       id: flutter-cache
-      uses: actions/cache@1a9e2138d905efd099035b49d8b7a3888c653ca8
+      uses: actions/cache@c64c572235d810460d0d6876e9c705ad5002b353
       with:
         path: flutter
         key: ${{ env.cache-name }}-ubuntu-latest-${{ steps.get-flutter-version.outputs.version }}-${{ hashFiles('code/pubspec.lock') }}
@@ -123,7 +123,7 @@ jobs:
         pubspec-file-path: code/pubspec.yaml
     - name: Cache Flutter
       id: flutter-cache
-      uses: actions/cache@1a9e2138d905efd099035b49d8b7a3888c653ca8
+      uses: actions/cache@c64c572235d810460d0d6876e9c705ad5002b353
       with:
         path: flutter
         key: ${{ env.cache-name }}-${{ matrix.os }}-${{ steps.get-flutter-version.outputs.version }}-${{ hashFiles('code/pubspec.lock') }}
