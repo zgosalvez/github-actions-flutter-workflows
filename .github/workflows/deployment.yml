@@ -188,7 +188,7 @@ jobs:
     # apk/aab
     - name: Upload the artifacts — ${{ matrix.file }}-mapping.txt file
       if: matrix.file == 'apk' || matrix.file == 'aab'
-      uses: actions/upload-artifact@ee69f02b3dfdecd58bb31b4d133da38ba6fe3700
+      uses: actions/upload-artifact@27121b0bdffd731efa15d66772be8dc71245d074
       with:
         name: ${{ matrix.file }}-mapping.txt
         path: ${{ matrix.file }}-mapping.txt
@@ -217,7 +217,7 @@ jobs:
       run: zip --recurse-paths ${{ github.workspace }}/code/flutter-${{ matrix.file }}-symbols.zip .
       working-directory: code/${{ env.FLUTTER_DEBUG_INFO_PATH }}
     - name: Upload the artifacts — flutter-${{ matrix.file }}-symbols.zip file
-      uses: actions/upload-artifact@ee69f02b3dfdecd58bb31b4d133da38ba6fe3700
+      uses: actions/upload-artifact@27121b0bdffd731efa15d66772be8dc71245d074
       with:
         name: flutter-${{ matrix.file }}-symbols.zip
         path: code/flutter-${{ matrix.file }}-symbols.zip
@@ -231,7 +231,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Upload the artifacts — ${{ matrix.file }} file
-      uses: actions/upload-artifact@ee69f02b3dfdecd58bb31b4d133da38ba6fe3700
+      uses: actions/upload-artifact@27121b0bdffd731efa15d66772be8dc71245d074
       with:
         name: app.${{ matrix.file }}
         path: app.${{ matrix.file }}
