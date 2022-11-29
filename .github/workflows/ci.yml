@@ -67,7 +67,7 @@ jobs:
       working-directory: code
     - name: Analyze Flutter
       if: matrix.category == 'static'
-      uses: zgosalvez/github-actions-analyze-dart@bc72307ba08e59e62f4d6e5ae311cc464dc0f296
+      uses: zgosalvez/github-actions-analyze-dart@a8b9f540ada4a9d7c85e30641c673217b9501640
       with:
         fail-on-warnings: true
         working-directory: code
