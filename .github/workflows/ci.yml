@@ -95,7 +95,7 @@ jobs:
         name: code-coverage
         path: coverage
     - name: Report code coverage
-      uses: zgosalvez/github-actions-report-lcov@49af65b0586c274a625a41a2dc8aaaae7d00568b
+      uses: zgosalvez/github-actions-report-lcov@3484f43155c9c7b9428326a88afb5107f9b0532c
       with:
         coverage-files: coverage/lcov.*.info
         minimum-coverage: 90
