@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Clone the repository
-      uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
+      uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
     - name: Ensure SHA pinned actions
       uses: zgosalvez/github-actions-ensure-sha-pinned-actions@8877889a5717dad0b139f1d2925689aa68f88a43
 
@@ -35,7 +35,7 @@ jobs:
       fail-fast: false
     steps:
     - name: Clone the repository
-      uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
+      uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
       with:
         path: code
     - name: Get Flutter version
@@ -57,7 +57,7 @@ jobs:
         cache-name: flutter-cache
     - name: Clone the Flutter repository
       if: steps.flutter-cache.outputs.cache-hit != 'true'
-      uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
+      uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
       with:
         repository: flutter/flutter
         ref: ${{ steps.get-flutter-version.outputs.version }}
@@ -113,7 +113,7 @@ jobs:
       if: ${{ !(matrix.file == 'apk' && github.event.release.prerelease) || ((matrix.file == 'aab' || matrix.file == 'ipa') && !github.event.release.prerelease) }}
       run: exit
     - name: Clone the repository
-      uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
+      uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
       with:
         path: code
     - name: Get Flutter version
@@ -135,7 +135,7 @@ jobs:
         cache-name: flutter-cache
     - name: Clone the Flutter repository
       if: steps.flutter-cache.outputs.cache-hit != 'true'
-      uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
+      uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
       with:
         repository: flutter/flutter
         ref: ${{ steps.get-flutter-version.outputs.version }}
