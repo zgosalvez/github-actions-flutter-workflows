@@ -94,6 +94,8 @@ jobs:
       with:
         name: code-coverage
         path: coverage
+    - name: Setup LCOV
+      uses: hrishikesh-kadam/setup-lcov@f5da1b26b0dcf5d893077a3c4f29cf78079c841d
     - name: Report code coverage
       uses: zgosalvez/github-actions-report-lcov@050502e137001138559ed0757a794d72e22359ff
       with:
