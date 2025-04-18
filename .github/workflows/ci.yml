@@ -77,7 +77,7 @@ jobs:
       working-directory: code
     - name: Upload code coverage to GitHub
       if: matrix.category != 'static'
-      uses: actions/upload-artifact@27121b0bdffd731efa15d66772be8dc71245d074
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
       with:
         name: code-coverage
         path: code/coverage/lcov.${{ matrix.category }}.info
