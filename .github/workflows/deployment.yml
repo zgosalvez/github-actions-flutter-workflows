@@ -45,7 +45,7 @@ jobs:
         pubspec-file-path: code/pubspec.yaml
     - name: Cache Flutter
       id: flutter-cache
-      uses: actions/cache@c64c572235d810460d0d6876e9c705ad5002b353
+      uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684
       with:
         path: flutter
         key: ${{ env.cache-name }}-ubuntu-latest-${{ steps.get-flutter-version.outputs.version }}-${{ hashFiles('code/pubspec.lock') }}
@@ -78,7 +78,7 @@ jobs:
     # static testing
     - name: Analyze Flutter
       if: matrix.category == 'static'
-      uses: zgosalvez/github-actions-analyze-dart@bc72307ba08e59e62f4d6e5ae311cc464dc0f296
+      uses: zgosalvez/github-actions-analyze-dart@92375956021937d35938504eefb62b18bfebb154
       with:
         fail-on-warnings: true
         working-directory: code
@@ -123,7 +123,7 @@ jobs:
         pubspec-file-path: code/pubspec.yaml
     - name: Cache Flutter
       id: flutter-cache
-      uses: actions/cache@c64c572235d810460d0d6876e9c705ad5002b353
+      uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684
       with:
         path: flutter
         key: ${{ env.cache-name }}-${{ matrix.os }}-${{ steps.get-flutter-version.outputs.version }}-${{ hashFiles('code/pubspec.lock') }}
@@ -188,7 +188,7 @@ jobs:
     # apk/aab
     - name: Upload the artifacts — ${{ matrix.file }}-mapping.txt file
       if: matrix.file == 'apk' || matrix.file == 'aab'
-      uses: actions/upload-artifact@27121b0bdffd731efa15d66772be8dc71245d074
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
       with:
         name: ${{ matrix.file }}-mapping.txt
         path: ${{ matrix.file }}-mapping.txt
@@ -217,7 +217,7 @@ jobs:
       run: zip --recurse-paths ${{ github.workspace }}/code/flutter-${{ matrix.file }}-symbols.zip .
       working-directory: code/${{ env.FLUTTER_DEBUG_INFO_PATH }}
     - name: Upload the artifacts — flutter-${{ matrix.file }}-symbols.zip file
-      uses: actions/upload-artifact@27121b0bdffd731efa15d66772be8dc71245d074
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
       with:
         name: flutter-${{ matrix.file }}-symbols.zip
         path: code/flutter-${{ matrix.file }}-symbols.zip
@@ -231,7 +231,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Upload the artifacts — ${{ matrix.file }} file
-      uses: actions/upload-artifact@27121b0bdffd731efa15d66772be8dc71245d074
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
       with:
         name: app.${{ matrix.file }}
         path: app.${{ matrix.file }}
