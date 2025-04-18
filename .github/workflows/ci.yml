@@ -89,14 +89,16 @@ jobs:
     steps:
     - name: Clone the repository
       uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
+    - name: Setup LCOV
+      uses: hrishikesh-kadam/setup-lcov@6c1aa0cc9e1c02f9f58f01ac599f1064ccc83470
     - name: Download code coverage from GitHub
       uses: actions/download-artifact@95815c38cf2ff2164869cbab79da8d1f422bc89e
       with:
         path: coverage
-        name: code-coverage-*
+        pattern: code-coverage-*
         merge-multiple: true
     - name: Report code coverage
-      uses: zgosalvez/github-actions-report-lcov@49af65b0586c274a625a41a2dc8aaaae7d00568b
+      uses: zgosalvez/github-actions-report-lcov@55c5634f4f1085c376473dfd5971662ced3b9dc1
       with:
         coverage-files: coverage/lcov.*.info
         minimum-coverage: 90
