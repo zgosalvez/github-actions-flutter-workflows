@@ -28,6 +28,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Label the Pull Request
-      uses: TimonVS/pr-labeler-action@bd0b592a410983316a454e3d48444608f028ec8e
+      uses: TimonVS/pr-labeler-action@f9c084306ce8b3f488a8f3ee1ccedc6da131d1af
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
