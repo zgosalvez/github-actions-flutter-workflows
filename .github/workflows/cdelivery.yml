@@ -23,7 +23,7 @@ jobs:
       uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744
     - name: Draft the release
       id: release-drafter
-      uses: release-drafter/release-drafter@fe52e97d262833ae07d05efaf1a239df3f1b5cd4
+      uses: release-drafter/release-drafter@b1476f6e6eb133afa41ed8589daba6dc69b4d3f5
       with:
         prerelease: true
       env:
