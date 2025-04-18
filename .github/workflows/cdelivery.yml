@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Clone the repository
-      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744
     - name: Ensure SHA pinned actions
       uses: zgosalvez/github-actions-ensure-sha-pinned-actions@4830be28ce81da52ec70d65c552a7403821d98d4
 
@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Clone the repository
-      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744
     - name: Draft the release
       id: release-drafter
       uses: release-drafter/release-drafter@fe52e97d262833ae07d05efaf1a239df3f1b5cd4
