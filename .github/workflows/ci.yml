@@ -93,7 +93,7 @@ jobs:
       uses: actions/download-artifact@95815c38cf2ff2164869cbab79da8d1f422bc89e
       with:
         path: coverage
-        name: code-coverage-*
+        pattern: code-coverage-*
         merge-multiple: true
     - name: Report code coverage
       uses: zgosalvez/github-actions-report-lcov@49af65b0586c274a625a41a2dc8aaaae7d00568b
