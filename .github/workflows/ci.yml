@@ -90,10 +90,11 @@ jobs:
     - name: Clone the repository
       uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
     - name: Download code coverage from GitHub
-      uses: actions/download-artifact@3be87be14a055c47b01d3bd88f8fe02320a9bb60
+      uses: actions/download-artifact@95815c38cf2ff2164869cbab79da8d1f422bc89e
       with:
-        name: code-coverage
         path: coverage
+        name: code-coverage-*
+        merge-multiple: true
     - name: Report code coverage
       uses: zgosalvez/github-actions-report-lcov@49af65b0586c274a625a41a2dc8aaaae7d00568b
       with:
