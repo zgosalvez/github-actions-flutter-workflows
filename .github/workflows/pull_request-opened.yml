@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Assign Author to the Pull Request
-      uses: technote-space/assign-author@6252488282b99652aef47451a353eb88aea24666
+      uses: technote-space/assign-author@9558557c5c4816f38bd06176fbc324ba14bb3160
 
   pr-labeler:
     name: Label the PR based on the branch
