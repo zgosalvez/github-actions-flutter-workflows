@@ -96,7 +96,7 @@ jobs:
         pattern: code-coverage-*
         merge-multiple: true
     - name: Report code coverage
-      uses: zgosalvez/github-actions-report-lcov@49af65b0586c274a625a41a2dc8aaaae7d00568b
+      uses: zgosalvez/github-actions-report-lcov@55c5634f4f1085c376473dfd5971662ced3b9dc1
       with:
         coverage-files: coverage/lcov.*.info
         minimum-coverage: 90
