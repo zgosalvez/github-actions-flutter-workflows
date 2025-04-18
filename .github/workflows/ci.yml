@@ -87,6 +87,7 @@ jobs:
     needs: testing
     runs-on: ubuntu-latest
     permissions:
+      contents: read
       issues: write
     steps:
     - name: Clone the repository
