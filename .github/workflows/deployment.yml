@@ -4,6 +4,7 @@ on:
   release:
     types: [ published ]
 
+
 jobs:
   security_hardening:
     name: Check security hardening

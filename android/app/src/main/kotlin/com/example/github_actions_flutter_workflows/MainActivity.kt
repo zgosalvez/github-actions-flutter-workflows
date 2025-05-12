@@ -1,5 +1,6 @@
-package com.example.github_actions_flutter_workflows
+package com.example.app_diary
 
 import io.flutter.embedding.android.FlutterActivity
 
-class MainActivity : FlutterActivity()
+class MainActivity: FlutterActivity() {
+}
