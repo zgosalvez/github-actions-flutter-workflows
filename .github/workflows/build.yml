@@ -1,0 +1,202 @@
+name: Flutter CI/CD
+
+# Tetikleme kontrolleri
+on:
+  # Push ve pull request'lerde çalış
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+  
+  # Manuel tetikleme seçeneği
+  workflow_dispatch:
+
+# İş tanımları
+jobs:
+  # Kod analizi ve test işi
+  analyze:
+    name: Kod Analizi
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Flutter ortamını kur
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.19.0'
+          channel: 'stable'
+      
+      - name: Bağımlılıkları yükle
+        run: flutter pub get
+      
+      - name: Kod formatını kontrol et
+        run: dart format --output=none --set-exit-if-changed .
+      
+      - name: Statik kod analizi
+        run: flutter analyze
+
+  # Android build işi
+  android-build:
+    name: Android Build
+    needs: analyze
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Flutter ortamını kur
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.19.0'
+          channel: 'stable'
+      
+      - name: Bağımlılıkları yükle
+        run: flutter pub get
+      
+      - name: Android APK derle
+        run: flutter build apk --release
+      
+      - name: Android App Bundle derle
+        run: flutter build appbundle
+      
+      # APK ve App Bundle'ı artifacts olarak yükle
+      - uses: actions/upload-artifact@v4
+        with:
+          name: android-builds
+          path: |
+            build/app/outputs/flutter-apk/app-release.apk
+            build/app/outputs/bundle/release/app-release.aab
+
+  # iOS build işi
+  ios-build:
+    name: iOS Build
+    needs: analyze
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Flutter ortamını kur
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.19.0'
+          channel: 'stable'
+      
+      - name: Bağımlılıkları yükle
+        run: flutter pub get
+      
+      - name: iOS ipa derle
+        run: flutter build ios --release --no-codesign
+      
+      # IPA dosyasını artifacts olarak yükle
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ios-build
+          path: build/ios/ipa/*.ipa
+
+  # Web build işi
+  web-build:
+    name: Web Build
+    needs: analyze
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Flutter ortamını kur
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.19.0'
+          channel: 'stable'
+      
+      - name: Bağımlılıkları yükle
+        run: flutter pub get
+      
+      - name: Web için derle
+        run: flutter build web
+      
+      # Web build'ını artifacts olarak yükle
+      - uses: actions/upload-artifact@v4
+        with:
+          name: web-build
+          path: build/web
+
+  # Windows build işi
+  windows-build:
+    name: Windows Build
+    needs: analyze
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Flutter ortamını kur
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.19.0'
+          channel: 'stable'
+      
+      - name: Bağımlılıkları yükle
+        run: flutter pub get
+      
+      - name: Windows için derle
+        run: flutter build windows
+      
+      # Windows build'ını artifacts olarak yükle
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows-build
+          path: build/windows/x64/runner/Release
+
+  # macOS build işi
+  macos-build:
+    name: macOS Build
+    needs: analyze
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Flutter ortamını kur
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.19.0'
+          channel: 'stable'
+      
+      - name: Bağımlılıkları yükle
+        run: flutter pub get
+      
+      - name: macOS için derle
+        run: flutter build macos
+      
+      # macOS build'ını artifacts olarak yükle
+      - uses: actions/upload-artifact@v4
+        with:
+          name: macos-build
+          path: build/macos/Build/Products/Release
+
+  # Linux build işi
+  linux-build:
+    name: Linux Build
+    needs: analyze
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Gerekli Linux bağımlılıklarını kur
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            clang \
+            cmake \
+            ninja-build \
+            pkg-config \
+            libgtk-3-dev \
+            liblzma-dev \
+            libstdc++-12-dev
+      
+      - name: Flutter ortamını kur
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.19.0'
+          channel: 'stable'
+      
+      - name: Bağımlılıkları yükle
+        run: flutter pub get
+      
+      - name: Linux için derle
+        run: flutter build linux
+      
+      # Linux build'ını artifacts olarak yükle
+      - uses: actions/upload-artifact@v4
+        with:
+          name: linux-build
+          path: build/linux/x64/release/bundle
