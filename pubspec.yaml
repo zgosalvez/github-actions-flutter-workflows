@@ -11,6 +11,12 @@ dependencies:
   path_provider: ^2.1.0
   device_apps: ^2.2.0
 
+# Android embedding v2 uyumluluğu için gerekli izinler
+android:
+  package: com.example.app_diary
+  permissions:
+    - android.permission.QUERY_ALL_PACKAGES
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
