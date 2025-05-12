@@ -1,122 +1,323 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:device_apps/device_apps.dart';
+import 'dart:io';
+import 'dart:convert';
 
 void main() {
-  runApp(const MyApp());
+  runApp(AppDiaryApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  // This widget is the root of your application.
+class AppDiaryApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Uygulama Defteri',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        primarySwatch: Colors.blue,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: AppListPage(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+class AppInfo {
+  String name;
+  String category;
+  Map<String, dynamic> cookies;
+  String packageName;
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
+  AppInfo({
+    required this.name, 
+    this.category = 'Kategorisiz', 
+    this.cookies = const {}, 
+    required this.packageName
+  });
 
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
+  Map<String, dynamic> toJson() => {
+    'name': name,
+    'category': category,
+    'cookies': cookies,
+    'packageName': packageName
+  };
 
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  factory AppInfo.fromJson(Map<String, dynamic> json) => AppInfo(
+    name: json['name'],
+    category: json['category'] ?? 'Kategorisiz',
+    cookies: json['cookies'] ?? {},
+    packageName: json['packageName']
+  );
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class AppListPage extends StatefulWidget {
+  @override
+  _AppListPageState createState() => _AppListPageState();
+}
 
-  void _incrementCounter() {
+class _AppListPageState extends State<AppListPage> {
+  List<AppInfo> _apps = [];
+  final _storage = FlutterSecureStorage();
+  bool _isLoading = false;
+  
+  @override
+  void initState() {
+    super.initState();
+    _loadApps();
+  }
+
+  Future<void> _loadApps() async {
+    try {
+      // Uygulama listesini yükle
+      String? savedAppsJson = await _storage.read(key: 'saved_apps');
+      if (savedAppsJson != null) {
+        List<dynamic> savedApps = json.decode(savedAppsJson);
+        setState(() {
+          _apps = savedApps.map((app) => AppInfo.fromJson(app)).toList();
+        });
+      }
+    } catch (e) {
+      print('Uygulamalar yüklenirken hata: $e');
+    }
+  }
+
+  Future<void> _saveApps() async {
+    try {
+      String appsJson = json.encode(_apps.map((app) => app.toJson()).toList());
+      await _storage.write(key: 'saved_apps', value: appsJson);
+    } catch (e) {
+      print('Uygulamalar kaydedilirken hata: $e');
+    }
+  }
+
+  Future<void> _fetchAllInstalledApps() async {
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+      _isLoading = true;
     });
+
+    try {
+      // Sistemdeki tüm uygulamaları al
+      List<Application> apps = await DeviceApps.getInstalledApplications(
+        includeAppIcons: false,
+        includeSystemApps: false,
+      );
+
+      // Yeni uygulamaları ekle (zaten varsa ekleme)
+      for (var app in apps) {
+        // Eğer uygulama zaten listede yoksa ekle
+        if (!_apps.any((existingApp) => existingApp.packageName == app.packageName)) {
+          setState(() {
+            _apps.add(AppInfo(
+              name: app.appName,
+              packageName: app.packageName,
+            ));
+          });
+        }
+      }
+
+      // Değişiklikleri kaydet
+      await _saveApps();
+    } catch (e) {
+      print('Uygulamalar alınırken hata: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Uygulamalar alınırken hata oluştu'))
+      );
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  void _addApp() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        String name = '';
+        String category = '';
+        Map<String, dynamic> cookies = {};
+        String packageName = '';
+
+        return AlertDialog(
+          title: Text('Yeni Uygulama Ekle'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                decoration: InputDecoration(hintText: 'Uygulama Adı'),
+                onChanged: (value) => name = value,
+              ),
+              TextField(
+                decoration: InputDecoration(hintText: 'Kategori'),
+                onChanged: (value) => category = value,
+              ),
+              TextField(
+                decoration: InputDecoration(hintText: 'Paket Adı'),
+                onChanged: (value) => packageName = value,
+              ),
+              TextField(
+                decoration: InputDecoration(hintText: 'Çerez Bilgileri (JSON formatında)'),
+                onChanged: (value) {
+                  try {
+                    cookies = json.decode(value);
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Geçersiz JSON formatı'))
+                    );
+                  }
+                },
+                maxLines: 3,
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              child: Text('İptal'),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            ElevatedButton(
+              child: Text('Kaydet'),
+              onPressed: () {
+                if (name.isNotEmpty && packageName.isNotEmpty) {
+                  setState(() {
+                    _apps.add(AppInfo(
+                      name: name, 
+                      category: category.isEmpty ? 'Kategorisiz' : category, 
+                      cookies: cookies,
+                      packageName: packageName
+                    ));
+                  });
+                  _saveApps();
+                  Navigator.of(context).pop();
+                }
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
+    // Kategorilere göre gruplandırma
+    Map<String, List<AppInfo>> categorizedApps = {};
+    for (var app in _apps) {
+      if (!categorizedApps.containsKey(app.category)) {
+        categorizedApps[app.category] = [];
+      }
+      categorizedApps[app.category]!.add(app);
+    }
+
     return Scaffold(
       appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        title: Text('Uygulama Defteri'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.refresh),
+            tooltip: 'Tüm Uygulamaları Getir',
+            onPressed: _fetchAllInstalledApps,
+          ),
+        ],
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+      body: _isLoading 
+        ? Center(child: CircularProgressIndicator())
+        : ListView(
+            children: categorizedApps.entries.map((entry) {
+              return ExpansionTile(
+                title: Text(entry.key),
+                children: entry.value.map((app) {
+                  return ListTile(
+                    title: Text(app.name),
+                    subtitle: Text('Paket Adı: ${app.packageName}'),
+                    trailing: Text('Çerez: ${app.cookies.length}'),
+                    onTap: () {
+                      // Uygulama detaylarını düzenleme
+                      _showAppDetailsDialog(app);
+                    },
+                  );
+                }).toList(),
+              );
+            }).toList(),
+          ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _addApp,
+        child: Icon(Icons.add),
+        tooltip: 'Yeni Uygulama Ekle',
+      ),
+    );
+  }
+
+  void _showAppDetailsDialog(AppInfo app) {
+    TextEditingController nameController = TextEditingController(text: app.name);
+    TextEditingController categoryController = TextEditingController(text: app.category);
+    TextEditingController cookiesController = TextEditingController(
+      text: json.encode(app.cookies)
+    );
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Uygulama Detayları'),
+          content: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TextField(
+                  controller: nameController,
+                  decoration: InputDecoration(labelText: 'Uygulama Adı'),
+                ),
+                TextField(
+                  controller: categoryController,
+                  decoration: InputDecoration(labelText: 'Kategori'),
+                ),
+                TextField(
+                  controller: cookiesController,
+                  decoration: InputDecoration(labelText: 'Çerez Bilgileri (JSON)'),
+                  maxLines: 3,
+                ),
+                Text('Paket Adı: ${app.packageName}'),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              child: Text('İptal'),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            ElevatedButton(
+              child: Text('Kaydet'),
+              onPressed: () {
+                try {
+                  // Çerez bilgilerini parse et
+                  Map<String, dynamic> updatedCookies = 
+                    json.decode(cookiesController.text);
+
+                  // Uygulamayı güncelle
+                  setState(() {
+                    app.name = nameController.text;
+                    app.category = categoryController.text.isEmpty 
+                      ? 'Kategorisiz' 
+                      : categoryController.text;
+                    app.cookies = updatedCookies;
+                  });
+
+                  // Değişiklikleri kaydet
+                  _saveApps();
+                  Navigator.of(context).pop();
+                } catch (e) {
+                  // JSON parse hatası
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Geçersiz JSON formatı'))
+                  );
+                }
+              },
             ),
           ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+        );
+      },
     );
   }
 }
