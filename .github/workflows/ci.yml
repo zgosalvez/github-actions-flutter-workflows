@@ -94,7 +94,7 @@ jobs:
     - name: Setup LCOV
       uses: hrishikesh-kadam/setup-lcov@6c1aa0cc9e1c02f9f58f01ac599f1064ccc83470
     - name: Download code coverage from GitHub
-      uses: actions/download-artifact@95815c38cf2ff2164869cbab79da8d1f422bc89e
+      uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0
       with:
         path: coverage
         pattern: code-coverage-*
